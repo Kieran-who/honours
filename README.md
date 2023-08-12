@@ -12,8 +12,10 @@ exploration of the morality of Large Language Models.
 Download or clone this repository.
 
 You will also need to download a Google access key and familiarise yourself with
-Google's cloud platform. OpenAI configuration is a lot simplier and only
-requires getting an API key.
+Google's cloud platform, the Vertext AI portal within Google cloud, and how to
+make API calls (and where to find the correct values for each item below - hint:
+ask Bard for step by step instructions). OpenAI configuration is a lot simplier
+and only requires getting an API key.
 
 You will also need to create a env file (create a file with the name .env)
 
