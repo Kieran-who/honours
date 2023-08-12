@@ -30,6 +30,8 @@ export const fetchRetry = async (
       } else if (response.status === 404) {
         console.log(`No item found at ${url}`);
         return `fetch error`;
+      } else if (response.status === 401) {
+        return `update google token`;
       } else {
         throw new Error(`${response.status} ${response.statusText}`);
       }

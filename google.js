@@ -113,7 +113,6 @@ const googTxtBison = async (primer, str, counter, params) => {
         }
         //console.log(`text-Bison Q:${qNum} call no. ${i + 1} / ${repeats}`);
       } else {
-        progressBar.interrupt(`error fetching from google: ${error}`);
         console.log(`Error fetching from google: ${error}`);
       }
     }
@@ -206,7 +205,7 @@ export const googBisonQuick = async (
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done text-bison-001 in ${obj.elapsedTime} ms.`);
+      console.log(`Done text-bison-001 in ${obj.elapsedTime / 60000} mins`);
       if (err) throw err;
     }
   );
@@ -365,7 +364,7 @@ export const googChatBisonQuick = async (
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done chat-bison-001 in ${obj.elapsedTime} ms.`);
+      console.log(`Done chat-bison-001 in ${obj.elapsedTime / 60000} mins`);
       if (err) throw err;
     }
   );

@@ -115,7 +115,7 @@ const stuffDoer = async (arr, sampleCount) => {
   const openAICaller = async () => {
     // DFEAULT MODEL PARAMETERS
     // GET RESULTS FROM GPT3.5-TURBO
-    await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
     console.log('GPT3.5-TURBO DEFAULT DONE');
     // GET RESULTS FROM GPT4
     await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
