@@ -35,12 +35,13 @@ export const fetchRetry = async (
       }
     } catch (error) {
       attempt++;
-      const errorMessage =
-        error === 'timeout' ? 'fetch timeout' : 'fetch error';
-      console.log(
-        `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
-      );
-      console.error('Error:', error);
+      const errorMessage = error.message;
+      if (!errorMessage.includes(`429`)) {
+        console.log(
+          `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
+        );
+        console.error('Error:', error);
+      }
       await delay(retryDelay * attempt);
     }
   }

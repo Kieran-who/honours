@@ -96,6 +96,13 @@ const chatOPENAIZeroParams = {
   top_p: 1,
 };
 
+// MATCH GOOGLE PARAMS TO OPENAI
+const googleMatchParams = {
+  temperature: 0.8,
+  topP: 1,
+  maxOutputTokens: 2,
+};
+
 // sampleCount must be multiple of 100
 const stuffDoer = async (arr, sampleCount) => {
   // CALCULATE REQUEST PARAMS FOR SAMPLE COUNT
@@ -103,23 +110,49 @@ const stuffDoer = async (arr, sampleCount) => {
   const sampleTotal = sampleCount;
   // openai models can return 100 samples at once, so we factor this in here
   const cnt = sampleCount / 100;
-  // DFEAULT MODEL PARAMETERS
-  // GET RESULTS FROM GPT3.5-TURBO
-  gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-  // GET RESULTS FROM GPT4
-  gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-  // GET RESULTS FROM GOOGLE TEXT BISON
-  googBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
-  // GET RESULTS FROM GOOGLE CHAT BISON
-  googChatBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
 
-  // ZERO MODEL PARAMETERS
-  // GET RESULTS FROM GPT3.5-TURBO
-  gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-  // GET RESULTS FROM GPT4
-  gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-  // GET RESULTS FROM GOOGLE TEXT BISON
-  googBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
-  // GET RESULTS FROM GOOGLE CHAT BISON
-  googChatBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
+  // OPENAI MODELS
+  const openAICaller = async () => {
+    // DFEAULT MODEL PARAMETERS
+    // GET RESULTS FROM GPT3.5-TURBO
+    await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+    console.log('GPT3.5-TURBO DEFAULT DONE');
+    // GET RESULTS FROM GPT4
+    await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+    console.log('GPT4 DEFAULT DONE');
+    // ZERO MODEL PARAMETERS
+    // GET RESULTS FROM GPT3.5-TURBO
+    await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+    console.log('GPT3.5-TURBO ZERO DONE');
+    // GET RESULTS FROM GPT4
+    await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+    console.log('OPENAI DONE');
+  };
+  const googleCaller = async () => {
+    // DEFAULT
+    // GET RESULTS FROM GOOGLE TEXT BISON
+    await googBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
+    console.log('GOOGLE 1 DONE');
+    // GET RESULTS FROM GOOGLE CHAT BISON
+    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
+    console.log('GOOGLE 2 DONE');
+    // ZERO MODEL PARAMETERS
+    // GET RESULTS FROM GOOGLE TEXT BISON
+    await googBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
+    console.log('GOOGLE 3 DONE');
+    // GET RESULTS FROM GOOGLE CHAT BISON
+    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
+    console.log('GOOGLE 4 DONE');
+    // MATCH GOOGLE PARAMS TO OPENAI
+    // GET RESULTS FROM GOOGLE TEXT BISON
+    await googBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
+    console.log('GOOGLE 5 DONE');
+    // GET RESULTS FROM GOOGLE CHAT BISON
+    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
+    console.log('GOOGLE 6 DONE');
+  };
+  openAICaller();
+  googleCaller();
 };
+
+stuffDoer(rQuestions, 500);
