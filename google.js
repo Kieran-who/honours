@@ -77,7 +77,8 @@ const googTxtBison = async (primer, str, counter, params) => {
   };
   //console.log(options.body);
   let choiceCount = [];
-  for (let i = 0; i < repeats; i++) {
+  // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
+  while (choiceCount.length < repeats) {
     try {
       let data = await fetchRetry(endpointURL, options, 200, 3000, 100000);
       if (data === `update google token`) {
@@ -229,15 +230,14 @@ const googChatBison = async (primer, str, counter, params) => {
     ],
     parameters: params,
   };
-  console.log(nameBody);
-
   const options = {
     method: 'POST',
     body: JSON.stringify(nameBody),
     headers: headers,
   };
   let choiceCount = [];
-  for (let i = 0; i < repeats; i++) {
+  // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
+  while (choiceCount.length < repeats) {
     try {
       let data = await fetchRetry(endpointURL, options, 200, 3000, 100000);
       console.log(data.predictions[0].candidates[0].content);
@@ -267,7 +267,6 @@ const googChatBison = async (primer, str, counter, params) => {
         if (dataErr.predictions) {
           choiceCount.push(dataErr.predictions[0].candidates[0].content);
         } else {
-          choiceCount.push(null);
           console.log(`google auth error`);
         }
         //console.log(`text-Bison Q:${qNum} call no. ${i + 1} / ${repeats}`);

@@ -55,3 +55,7 @@ the console when each run is complete. The last console log will likely be
 'GOOGLE 6 DONE'.
 
 It takes time to run due to rate limits on the APIs.
+
+Files are saved in JSON format. If needed, these files can be converted to csv
+(and opened and then saved in Excel) using a site such as this:
+https://www.convertcsv.com/json-to-csv.htm
