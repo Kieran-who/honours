@@ -33,7 +33,7 @@ API_KEY=
 BISON_CHAT=chat-bison@001
 BISON_TEXT=text-bison@001
 
-GOOGLE_APPLICATION_CREDENTIALS=./googl-access-key.json
+GOOGLE_APPLICATION_CREDENTIALS=./googl-access-key.json (or update with the filepath to your Google access key)
 PROJECT_ID=
 
 ```
