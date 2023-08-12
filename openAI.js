@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
-import { fetchRetry } from "./fetchRetry.js";
-import fs from "fs";
+import { fetchRetry } from './fetchRetry.js';
+import fs from 'fs';
 
 //OpenAI details
 const openAIKey = process.env.OPEN_AI_KEY;
@@ -17,28 +17,28 @@ const chatGPT35EquivParams = {
 //ask chatGPT endpoint specific question
 const gptThreeFiveTurboCaller = async (primer, str, params) => {
   const headers = new Headers({
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${openAIKey}`,
   });
   const nameBody = {
-    model: "gpt-3.5-turbo",
+    model: 'gpt-3.5-turbo',
     n: 100,
     temperature: params.temperature,
     top_p: params.top_p,
     max_tokens: 1,
     messages: [
       {
-        role: "system",
+        role: 'system',
         content: primer,
       },
       {
-        role: "system",
+        role: 'system',
         content: str,
       },
     ],
   };
   const options = {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(nameBody),
     headers: headers,
   };
@@ -52,22 +52,16 @@ const gptThreeFiveTurboCaller = async (primer, str, params) => {
   return returnData;
 };
 
-export const gptThreeFiveTurbo = async (
-  arr,
-  cnt,
-  samplePerQ,
-  params,
-) => {
+export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
   let resCount = cnt ? cnt : 100;
   const startTime = performance.now();
   const date = new Date();
   const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
-    metaData: false,
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -90,6 +84,7 @@ export const gptThreeFiveTurbo = async (
       for (let r = 0; r < chatResponse.choices.length; r++) {
         if (!Number(chatResponse.choices[r])) {
           errCount++;
+          obj.questions[i].errorResponses.push(chatResponse.choices[r]);
         } else {
           obj.questions[i].answers.push(Number(chatResponse.choices[r]));
         }
@@ -102,7 +97,7 @@ export const gptThreeFiveTurbo = async (
     });
     const average = sum / obj.questions[i].answers.length;
     obj.questions[i].ave = average;
-    obj.questions[i].validCount = obj.questions[i].answers.length;    
+    obj.questions[i].validCount = obj.questions[i].answers.length;
   }
   const endTime = performance.now(); // Stop measuring the time
   obj.elapsedTime = endTime - startTime;
@@ -111,7 +106,7 @@ export const gptThreeFiveTurbo = async (
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
   }
-  const fileData = dateString.replace(/:/g, "~");
+  const fileData = dateString.replace(/:/g, '~');
   fs.appendFile(
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
@@ -124,28 +119,28 @@ export const gptThreeFiveTurbo = async (
 
 const gptFourCaller = async (primer, str, params) => {
   const headers = new Headers({
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
     Authorization: `Bearer ${openAIKey}`,
   });
   const nameBody = {
-    model: "gpt-4",
+    model: 'gpt-4',
     n: 25,
     temperature: params.temperature,
     top_p: params.top_p,
     max_tokens: 1,
     messages: [
       {
-        role: "system",
+        role: 'system',
         content: primer,
       },
       {
-        role: "system",
+        role: 'system',
         content: str,
       },
     ],
   };
   const options = {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(nameBody),
     headers: headers,
   };
@@ -159,22 +154,16 @@ const gptFourCaller = async (primer, str, params) => {
   return returnData;
 };
 
-export const gptFour = async (
-  arr,
-  cnt,
-  samplePerQ,
-  params,
-) => {
+export const gptFour = async (arr, cnt, samplePerQ, params) => {
   let resCount = cnt ? cnt : 100;
   const startTime = performance.now();
   const date = new Date();
   const year = date.getFullYear();
-  const month = ("0" + (date.getMonth() + 1)).slice(-2);
-  const day = ("0" + date.getDate()).slice(-2);
+  const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  const day = ('0' + date.getDate()).slice(-2);
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
-    metaData: false,
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -197,6 +186,7 @@ export const gptFour = async (
       for (let r = 0; r < chatResponse.choices.length; r++) {
         if (!Number(chatResponse.choices[r])) {
           errCount++;
+          obj.questions[i].errorResponses.push(chatResponse.choices[r]);
         } else {
           obj.questions[i].answers.push(Number(chatResponse.choices[r]));
         }
@@ -213,12 +203,12 @@ export const gptFour = async (
   }
   const endTime = performance.now(); // Stop measuring the time
   obj.elapsedTime = endTime - startTime;
-  const dirPath = `./data/${obj.model}`;  
+  const dirPath = `./data/${obj.model}`;
   // Create the directory if it doesn't exist
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
   }
-  const fileData = dateString.replace(/:/g, "~");
+  const fileData = dateString.replace(/:/g, '~');
   fs.appendFile(
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),

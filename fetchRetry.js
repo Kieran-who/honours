@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import fetch from 'node-fetch';
 //retry API function
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -17,7 +17,7 @@ export const fetchRetry = async (
       const response = await Promise.race([
         fetch(url, fetchOptions), // normal fetch request
         new Promise((_, reject) =>
-          setTimeout(() => reject("timeout"), rejectTime)
+          setTimeout(() => reject('timeout'), rejectTime)
         ), // reject timeout after 50 seconds
       ]);
 
@@ -36,11 +36,11 @@ export const fetchRetry = async (
     } catch (error) {
       attempt++;
       const errorMessage =
-        error === "timeout" ? "fetch timeout" : "fetch error";
+        error === 'timeout' ? 'fetch timeout' : 'fetch error';
       console.log(
         `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
       );
-      console.error("Error:", error);
+      console.error('Error:', error);
       await delay(retryDelay * attempt);
     }
   }
