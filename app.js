@@ -110,7 +110,6 @@ const stuffDoer = async (arr, sampleCount) => {
   const sampleTotal = sampleCount;
   // openai models can return 100 samples at once, so we factor this in here
   const cnt = sampleCount / 100;
-
   // OPENAI MODELS
   const openAICaller = async () => {
     // DFEAULT MODEL PARAMETERS
@@ -151,8 +150,9 @@ const stuffDoer = async (arr, sampleCount) => {
     await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
     console.log('GOOGLE 6 DONE');
   };
-  openAICaller();
+  //openAICaller();
   googleCaller();
 };
 
+// 500 is the number of samples to generate for each question; update this value in increments of 100
 stuffDoer(rQuestions, 500);

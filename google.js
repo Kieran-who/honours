@@ -80,44 +80,13 @@ const googTxtBison = async (primer, str, counter, params) => {
   // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
   while (choiceCount.length < repeats) {
     try {
-      let data = await fetchRetry(endpointURL, options, 200, 3000, 100000);
-      if (data === `update google token`) {
-        throw new Error(`update google token`);
-      }
+      let data = await fetchRetry(endpointURL, options, 100, 500, 100000);
       choiceCount.push(data.predictions[0].content);
-      //progressBar.interrupt(`got goog call`);
-      //console.log(`text-Bison Q:${qNum} call no. ${i + 1} / ${repeats}`);
     } catch (error) {
-      if (error.message === `update google token`) {
-        const newHeaders = new Headers({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authCode}`,
-        });
-        const newOptions = {
-          method: 'POST',
-          body: JSON.stringify(nameBody),
-          headers: newHeaders,
-        };
-        let dataErr = await fetchRetry(
-          endpointURL,
-          newOptions,
-          50,
-          100000,
-          100000
-        );
-        //console.log(`data: ${dataErr}`);
-        if (dataErr.predictions) {
-          choiceCount.push(dataErr.predictions[0].content);
-        } else {
-          choiceCount.push(null);
-          console.log(`google auth error`);
-        }
-        //console.log(`text-Bison Q:${qNum} call no. ${i + 1} / ${repeats}`);
-      } else {
-        console.log(`Error fetching from google: ${error}`);
-      }
+      console.log(`Error fetching from google: ${error}`);
     }
   }
+
   let returnData = { model: `text-bison@001`, choices: choiceCount };
   return returnData;
 };
@@ -239,40 +208,10 @@ const googChatBison = async (primer, str, counter, params) => {
   // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
   while (choiceCount.length < repeats) {
     try {
-      let data = await fetchRetry(endpointURL, options, 200, 3000, 100000);
-      console.log(data.predictions[0].candidates[0].content);
-      if (data === `update google token`) {
-        throw new Error(`update google token`);
-      }
+      let data = await fetchRetry(endpointURL, options, 100, 500, 100000);
       choiceCount.push(data.predictions[0].candidates[0].content);
     } catch (error) {
-      if (error.message === `update google token`) {
-        const newHeaders = new Headers({
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${authCode}`,
-        });
-        const newOptions = {
-          method: 'POST',
-          body: JSON.stringify(nameBody),
-          headers: newHeaders,
-        };
-        let dataErr = await fetchRetry(
-          endpointURL,
-          newOptions,
-          50,
-          100000,
-          100000
-        );
-        //console.log(`data: ${dataErr}`);
-        if (dataErr.predictions) {
-          choiceCount.push(dataErr.predictions[0].candidates[0].content);
-        } else {
-          console.log(`google auth error`);
-        }
-        //console.log(`text-Bison Q:${qNum} call no. ${i + 1} / ${repeats}`);
-      } else {
-        console.log(`Error fetching from google: ${error}`);
-      }
+      console.log(`Error fetching from google: ${error}`);
     }
   }
   let returnData = { model: `chat-bison@001`, choices: choiceCount };
