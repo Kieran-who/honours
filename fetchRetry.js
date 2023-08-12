@@ -32,13 +32,15 @@ export const fetchRetry = async (
         return `fetch error`;
       } else if (response.status === 401) {
         return `update google token`;
+      } else if (response.status === 429) {
+        throw new Error(`429`);
       } else {
         throw new Error(`${response.status} ${response.statusText}`);
       }
     } catch (error) {
       attempt++;
       const errorMessage = error.message;
-      if (!errorMessage.includes(`429`)) {
+      if (errorMessage !== `429`) {
         console.log(
           `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
         );
@@ -50,5 +52,5 @@ export const fetchRetry = async (
 
   console.log(`Too many failed attempts were made to ${url}`);
   //sendErrorAlert(err, url);
-  return `fetch error`;
+  throw new Error(`Too many failed attempts were made to ${url}`);
 };

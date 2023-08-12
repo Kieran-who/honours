@@ -57,30 +57,31 @@ async function refreshToken() {
 const googTxtBison = async (primer, str, counter, params) => {
   let repeats = counter ? counter : 100;
   const endpointURL = `https://${endAPIPoint}/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${googTxtMod}:predict`;
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${authCode}`,
-  });
-  const nameBody = {
-    instances: [
-      {
-        content: `${primer}\n\nSTATEMENT: ${str}\n\nANSWER: `,
-      },
-    ],
-    parameters: params,
-  };
 
-  const options = {
-    method: 'POST',
-    body: JSON.stringify(nameBody),
-    headers: headers,
-  };
   //console.log(options.body);
   let choiceCount = [];
   // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
   while (choiceCount.length < repeats) {
     try {
-      let data = await fetchRetry(endpointURL, options, 100, 500, 100000);
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authCode}`,
+      });
+      const nameBody = {
+        instances: [
+          {
+            content: `${primer}\n\nSTATEMENT: ${str}\n\nANSWER: `,
+          },
+        ],
+        parameters: params,
+      };
+
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(nameBody),
+        headers: headers,
+      };
+      let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
       choiceCount.push(data.predictions[0].content);
     } catch (error) {
       console.log(`Error fetching from google: ${error}`);
@@ -185,30 +186,31 @@ export const googBisonQuick = async (
 const googChatBison = async (primer, str, counter, params) => {
   let repeats = counter ? counter : 100;
   const endpointURL = `https://${endAPIPoint}/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${googChatMod}:predict`;
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${authCode}`,
-  });
-  const nameBody = {
-    instances: [
-      {
-        context: primer,
-        examples: [],
-        messages: [{ author: `user`, content: str }],
-      },
-    ],
-    parameters: params,
-  };
-  const options = {
-    method: 'POST',
-    body: JSON.stringify(nameBody),
-    headers: headers,
-  };
+
   let choiceCount = [];
   // we use a while loop to ensure we get the number of samples we want; for loop is not guaranteed to do this if the call fails
   while (choiceCount.length < repeats) {
     try {
-      let data = await fetchRetry(endpointURL, options, 100, 500, 100000);
+      const headers = new Headers({
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${authCode}`,
+      });
+      const nameBody = {
+        instances: [
+          {
+            context: primer,
+            examples: [],
+            messages: [{ author: `user`, content: str }],
+          },
+        ],
+        parameters: params,
+      };
+      const options = {
+        method: 'POST',
+        body: JSON.stringify(nameBody),
+        headers: headers,
+      };
+      let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
       choiceCount.push(data.predictions[0].candidates[0].content);
     } catch (error) {
       console.log(`Error fetching from google: ${error}`);

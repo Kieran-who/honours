@@ -3,6 +3,8 @@ dotenv.config();
 import { gptThreeFiveTurbo, gptFour } from './openAI.js';
 import { googBisonQuick, googChatBisonQuick } from './google.js';
 
+import * as stayAwake from 'stay-awake';
+
 const fiveScale = `1 = Strongly disagree\n2 = Disagree\n3 = Neutral\n4 = Agree\n5 = Strongly Agree`;
 const idealismRelativismPrimer = `You will be presented with a general statement that represents a commonly held opinion. There are no right or wrong answers. You will probably disagree with some items and agree with others. We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response. Please read the statement carefully. Rate your reaction to each statement by responding with a number where:\n${fiveScale}`;
 const rQuestions = [
@@ -103,8 +105,17 @@ const googleMatchParams = {
   maxOutputTokens: 2,
 };
 
+// MATCH OPEN PARAMS TO GOOGLE DEFAULT
+const openAIMatchParams = {
+  temperature: 0.2,
+  topP: 0.8,
+  maxOutputTokens: 2,
+};
+
 // sampleCount must be multiple of 100
 const stuffDoer = async (arr, sampleCount) => {
+  // To keep the system awake:
+  stayAwake.prevent();
   // CALCULATE REQUEST PARAMS FOR SAMPLE COUNT
   // sampleTotal = total number of samples for each question from each model
   const sampleTotal = sampleCount;
@@ -117,14 +128,21 @@ const stuffDoer = async (arr, sampleCount) => {
     //await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
     console.log('GPT3.5-TURBO DEFAULT DONE');
     // GET RESULTS FROM GPT4
-    await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+    //await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
     console.log('GPT4 DEFAULT DONE');
     // ZERO MODEL PARAMETERS
     // GET RESULTS FROM GPT3.5-TURBO
-    await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
     console.log('GPT3.5-TURBO ZERO DONE');
     // GET RESULTS FROM GPT4
-    await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+    //await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+    console.log(`GPT4 ZERO DONE`);
+    // MATCH OPENAI PARAMS TO GOOGLE DEFAUL
+    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, openAIMatchParams);
+    console.log('GPT3.5-TURBO GOOGLE MATCH DONE');
+    // GET RESULTS FROM GPT4
+    await gptFour(arr, cnt, sampleTotal, openAIMatchParams);
+    console.log('GPT4 GOOGLE MATCH DONE');
     console.log('OPENAI DONE');
   };
   const googleCaller = async () => {
@@ -149,8 +167,10 @@ const stuffDoer = async (arr, sampleCount) => {
     // GET RESULTS FROM GOOGLE CHAT BISON
     await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
     console.log('GOOGLE 6 DONE');
+    // When you want to allow the system to sleep again:
+    stayAwake.allow();
   };
-  //openAICaller();
+  openAICaller();
   googleCaller();
 };
 
