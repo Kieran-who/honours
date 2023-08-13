@@ -194,11 +194,17 @@ export const gptFour = async (arr, cnt, samplePerQ, params) => {
       //console.log(`${i + 1}: ${c + 1}/${resCount}`);
     }
     obj.questions[i].nonValid = errCount;
-    const sum = obj.questions[i].answers.reduce((accumulator, currentValue) => {
-      return accumulator + currentValue;
-    });
-    const average = sum / obj.questions[i].answers.length;
-    obj.questions[i].ave = average;
+    if (obj.questions[i].answers.length > 0) {
+      const sum = obj.questions[i].answers.reduce(
+        (accumulator, currentValue) => {
+          return accumulator + currentValue;
+        }
+      );
+      const average = sum / obj.questions[i].answers.length;
+      obj.questions[i].ave = average;
+    } else {
+      obj.questions[i].ave = null;
+    }
     obj.questions[i].validCount = obj.questions[i].answers.length;
   }
   const endTime = performance.now(); // Stop measuring the time

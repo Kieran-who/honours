@@ -279,13 +279,17 @@ export const googChatBisonQuick = async (
     }
 
     obj.questions[index].nonValid = errCount;
-    const sum = obj.questions[index].answers.reduce(
-      (accumulator, currentValue) => {
-        return accumulator + currentValue;
-      }
-    );
-    const average = sum / obj.questions[index].answers.length;
-    obj.questions[index].ave = average;
+    if (obj.questions[index].answers.length > 0) {
+      const sum = obj.questions[index].answers.reduce(
+        (accumulator, currentValue) => {
+          return accumulator + currentValue;
+        }
+      );
+      const average = sum / obj.questions[index].answers.length;
+      obj.questions[index].ave = average;
+    } else {
+      obj.questions[index].ave = null;
+    }
     obj.questions[index].validCount = obj.questions[index].answers.length;
   });
 

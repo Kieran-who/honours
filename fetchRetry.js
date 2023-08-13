@@ -40,6 +40,7 @@ export const fetchRetry = async (
     } catch (error) {
       attempt++;
       const errorMessage = error.message;
+      // 429 will be returned frequently as rate limits hit, no need to console log
       if (errorMessage !== `429`) {
         console.log(
           `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
@@ -49,8 +50,5 @@ export const fetchRetry = async (
       await delay(retryDelay * attempt);
     }
   }
-
-  console.log(`Too many failed attempts were made to ${url}`);
-  //sendErrorAlert(err, url);
   throw new Error(`Too many failed attempts were made to ${url}`);
 };
