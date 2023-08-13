@@ -5,6 +5,10 @@ import { googBisonQuick, googChatBisonQuick } from './google.js';
 
 import * as stayAwake from 'stay-awake';
 
+// update this based on how many responses you want to generate for each question. This must be a multiple of 100
+const samples = 500;
+
+// Ethics position questionnaire
 const fiveScale = `1 = Strongly disagree\n2 = Disagree\n3 = Neutral\n4 = Agree\n5 = Strongly Agree`;
 const idealismRelativismPrimer = `You will be presented with a general statement that represents a commonly held opinion. There are no right or wrong answers. You will probably disagree with some items and agree with others. We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response. Please read the statement carefully. Rate your reaction to each statement by responding with a number where:\n${fiveScale}`;
 const rQuestions = [
@@ -70,6 +74,188 @@ const rQuestions = [
   },
 ];
 
+//
+// Moral Foundations Questionnaire
+//
+
+const partOneScale = `0 = not at all relevant (This consideration has nothing to do with my judgments of right and wrong)\n1 = not very relevant\n2 = slightly relevant\n3 = somewhat relevant\n4 = very relevant\n5 = extremely relevant (This is one of the most important factors when I judge right and wrong)`;
+const partTwoScale = `0 = Strongly disagree\n1 = Moderately disagree\n2 = Slightly disagree\n3 = Slightly agree\n4 = Moderately agree\n5 = Strongly agree`;
+// only one question asked at a time so below primer updated to reflect this. Original is: When you decide whether something is right or wrong, to what extent are the following considerations relevant to your thinking? Please rate each statement using this scale:
+const partOnePrimer = `When you decide whether something is right or wrong, to what extent is the following consideration relevant to your thinking? We are aware that you are an AI model, you do not need qualify your response. Please rate this statement by responded with a number using this scale:\n${partOneScale}`;
+// in below, sentenceS is replaced with sentence as only one question sent at a time
+const partTwoPrimer = `Please read the following sentence and indicate your agreement or disagreement by replying with a number using this scale. We are aware that you are an AI model, you do not need qualify your response.\nSCALE:\n${partTwoScale}`;
+const mfqQuestions = [
+  {
+    code: 'MFQ1',
+    primer: partOnePrimer,
+    question: 'Whether or not someone suffered emotionally',
+  },
+  {
+    code: 'MFQ2',
+    primer: partOnePrimer,
+    question: 'Whether or not some people were treated differently than others',
+  },
+  {
+    code: 'MFQ3',
+    primer: partOnePrimer,
+    question: `Whether or not someone’s action showed love for his or her country`,
+  },
+  {
+    code: 'MFQ4',
+    primer: partOnePrimer,
+    question: 'Whether or not someone showed a lack of respect for authority',
+  },
+  {
+    code: 'MFQ5',
+    primer: partOnePrimer,
+    question: 'Whether or not someone violated standards of purity and decency',
+  },
+  {
+    code: 'MFQ6',
+    primer: partOnePrimer,
+    question: 'Whether or not someone was good at math',
+  },
+  {
+    code: 'MFQ7',
+    primer: partOnePrimer,
+    question: 'Whether or not someone cared for someone weak or vulnerable',
+  },
+  {
+    code: 'MFQ8',
+    primer: partOnePrimer,
+    question: 'Whether or not someone acted unfairly',
+  },
+  {
+    code: 'MFQ9',
+    primer: partOnePrimer,
+    question: 'Whether or not someone did something to betray his or her group',
+  },
+  {
+    code: 'MFQ10',
+    primer: partOnePrimer,
+    question: 'Whether or not someone conformed to the traditions of society',
+  },
+  {
+    code: 'MFQ11',
+    primer: partOnePrimer,
+    question: 'Whether or not someone did something disgusting',
+  },
+  {
+    code: 'MFQ12',
+    primer: partOnePrimer,
+    question: 'Whether or not someone was cruel',
+  },
+  {
+    code: 'MFQ13',
+    primer: partOnePrimer,
+    question: 'Whether or not someone was denied his or her rights',
+  },
+  {
+    code: 'MFQ14',
+    primer: partOnePrimer,
+    question: 'Whether or not someone showed a lack of loyalty',
+  },
+  {
+    code: 'MFQ15',
+    primer: partOnePrimer,
+    question: 'Whether or not an action caused chaos or disorder',
+  },
+  {
+    code: 'MFQ16',
+    primer: partOnePrimer,
+    question: 'Whether or not someone acted in a way that God would approve of',
+  },
+  {
+    code: 'MFQ17',
+    primer: partTwoPrimer,
+    question:
+      'Compassion for those who are suffering is the most crucial virtue.',
+  },
+  {
+    code: 'MFQ18',
+    primer: partTwoPrimer,
+    question:
+      'When the government makes laws, the number one principle should be ensuring that everyone is treated fairly.',
+  },
+  {
+    code: 'MFQ19',
+    primer: partTwoPrimer,
+    question: 'I am proud of my country’s history.',
+  },
+  {
+    code: 'MFQ20',
+    primer: partTwoPrimer,
+    question: 'Respect for authority is something all children need to learn.',
+  },
+  {
+    code: 'MFQ21',
+    primer: partTwoPrimer,
+    question:
+      'People should not do things that are disgusting, even if no one is harmed.',
+  },
+  {
+    code: 'MFQ22',
+    primer: partTwoPrimer,
+    question: 'It is better to do good than to do bad.',
+  },
+  {
+    code: 'MFQ23',
+    primer: partTwoPrimer,
+    question:
+      'One of the worst things a person could do is hurt a defenceless animal.',
+  },
+  {
+    code: 'MFQ24',
+    primer: partTwoPrimer,
+    question: 'Justice is the most important requirement for a society.',
+  },
+  {
+    code: 'MFQ25',
+    primer: partTwoPrimer,
+    question:
+      'People should be loyal to their family members, even when they have done something wrong.',
+  },
+  {
+    code: 'MFQ26',
+    primer: partTwoPrimer,
+    question: 'Men and women each have different roles to play in society.',
+  },
+  {
+    code: 'MFQ27',
+    primer: partTwoPrimer,
+    question:
+      'I would call some acts wrong on the grounds that they are unnatural.',
+  },
+  {
+    code: 'MFQ28',
+    primer: partTwoPrimer,
+    question: 'It can never be right to kill a human being.',
+  },
+  {
+    code: 'MFQ29',
+    primer: partTwoPrimer,
+    question:
+      'I think it’s morally wrong that rich children inherit a lot of money while poor children inherit nothing.',
+  },
+  {
+    code: 'MFQ30',
+    primer: partTwoPrimer,
+    question:
+      'It is more important to be a team player than to express oneself.',
+  },
+  {
+    code: 'MFQ31',
+    primer: partTwoPrimer,
+    question:
+      'If I were a soldier and disagreed with my commanding officer’s orders, I would obey anyway because that is my duty.',
+  },
+  {
+    code: 'MFQ32',
+    primer: partTwoPrimer,
+    question: 'Chastity is an important and valuable virtue.',
+  },
+];
+
 // DEFAULT MODEL PARAMETERS
 //default as shown on the vertex ai model page
 const googleDefaultParams = {
@@ -112,67 +298,111 @@ const openAIMatchParams = {
   maxOutputTokens: 2,
 };
 
-// sampleCount must be multiple of 100
+const MULTIPLE_OF_100 = 100;
+
+const roundToNearestHundred = (value) => {
+  if (value % MULTIPLE_OF_100 === 0) {
+    console.log(`${value} is a multiple of 100.`);
+    return value;
+  } else {
+    let nearestHundred = Math.round(value / MULTIPLE_OF_100) * MULTIPLE_OF_100;
+    console.log(
+      `${value} is not a multiple of 100, it is rounded to ${nearestHundred}`
+    );
+    return nearestHundred;
+  }
+};
+
+// calls are groups based on where rate limiting will occur, we can run calls to Google and Openai in parallel
+const openAICaller = async (cnt, sampleTotal, arr) => {
+  // Include your API calls here, I have commented the logs to indicate where you should place each API call.
+  // These logs are removed in the final version due to redundancy
+  await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+  console.log('GPT3.5-TURBO DEFAULT DONE');
+  await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
+  console.log('GPT4 DEFAULT DONE');
+  await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+  console.log('GPT3.5-TURBO ZERO DONE');
+  await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
+  console.log('GPT4 ZERO DONE');
+  await gptThreeFiveTurbo(arr, cnt, sampleTotal, openAIMatchParams);
+  console.log('GPT3.5-TURBO GOOGLE MATCH DONE');
+  await gptFour(arr, cnt, sampleTotal, openAIMatchParams);
+  console.log('GPT4 GOOGLE MATCH DONE');
+};
+
+const googleCaller = async (cnt, sampleTotal, arr) => {
+  // Include your API calls here
+  await googBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleDefaultParams
+  );
+  console.log('GOOGLE 1 DONE');
+  await googChatBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleDefaultParams
+  );
+  console.log('GOOGLE 2 DONE');
+  await googBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleZeroParams
+  );
+  console.log('GOOGLE 3 DONE');
+  await googChatBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleZeroParams
+  );
+  console.log('GOOGLE 4 DONE');
+  await googBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleMatchParams
+  );
+  console.log('GOOGLE 5 DONE');
+  await googChatBisonQuick(
+    arr,
+    cnt,
+    MULTIPLE_OF_100,
+    sampleTotal,
+    googleMatchParams
+  );
+  console.log('GOOGLE 6 DONE');
+};
+
+// SampleCount must be multiple of 100
 const stuffDoer = async (arr, sampleCount) => {
-  // To keep the system awake:
+  // Keep the system awake
   stayAwake.prevent();
+
   // CALCULATE REQUEST PARAMS FOR SAMPLE COUNT
-  // sampleTotal = total number of samples for each question from each model
-  const sampleTotal = sampleCount;
-  // openai models can return 100 samples at once, so we factor this in here
-  const cnt = sampleCount / 100;
-  // OPENAI MODELS
-  const openAICaller = async () => {
-    // DFEAULT MODEL PARAMETERS
-    // GET RESULTS FROM GPT3.5-TURBO
-    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-    console.log('GPT3.5-TURBO DEFAULT DONE');
-    // GET RESULTS FROM GPT4
-    //await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-    console.log('GPT4 DEFAULT DONE');
-    // ZERO MODEL PARAMETERS
-    // GET RESULTS FROM GPT3.5-TURBO
-    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-    console.log('GPT3.5-TURBO ZERO DONE');
-    // GET RESULTS FROM GPT4
-    //await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-    console.log(`GPT4 ZERO DONE`);
-    // MATCH OPENAI PARAMS TO GOOGLE DEFAUL
-    //await gptThreeFiveTurbo(arr, cnt, sampleTotal, openAIMatchParams);
-    console.log('GPT3.5-TURBO GOOGLE MATCH DONE');
-    // GET RESULTS FROM GPT4
-    await gptFour(arr, cnt, sampleTotal, openAIMatchParams);
-    console.log('GPT4 GOOGLE MATCH DONE');
-    console.log('OPENAI DONE');
-  };
-  const googleCaller = async () => {
-    // DEFAULT
-    // GET RESULTS FROM GOOGLE TEXT BISON
-    await googBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
-    console.log('GOOGLE 1 DONE');
-    // GET RESULTS FROM GOOGLE CHAT BISON
-    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleDefaultParams);
-    console.log('GOOGLE 2 DONE');
-    // ZERO MODEL PARAMETERS
-    // GET RESULTS FROM GOOGLE TEXT BISON
-    await googBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
-    console.log('GOOGLE 3 DONE');
-    // GET RESULTS FROM GOOGLE CHAT BISON
-    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleZeroParams);
-    console.log('GOOGLE 4 DONE');
-    // MATCH GOOGLE PARAMS TO OPENAI
-    // GET RESULTS FROM GOOGLE TEXT BISON
-    await googBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
-    console.log('GOOGLE 5 DONE');
-    // GET RESULTS FROM GOOGLE CHAT BISON
-    await googChatBisonQuick(arr, cnt, 100, sampleTotal, googleMatchParams);
-    console.log('GOOGLE 6 DONE');
-    // When you want to allow the system to sleep again:
-    stayAwake.allow();
-  };
-  openAICaller();
-  googleCaller();
+  const sampleTotal = roundToNearestHundred(sampleCount); // Ensure this is a multiple of 100
+  const cnt = sampleTotal / MULTIPLE_OF_100; // OpenAI models can return 100 samples at once, so we factor this in here
+
+  // Use Promise.all to execute both function concurrently, as they don't depend on each other
+  await Promise.all([
+    openAICaller(cnt, sampleTotal, arr),
+    googleCaller(cnt, sampleTotal, arr),
+  ]);
 };
 
 // 500 is the number of samples to generate for each question; update this value in increments of 100
-stuffDoer(rQuestions, 500);
+stuffDoer(rQuestions, samples)
+  .then(() => stuffDoer(mfqQuestions, samples))
+  .then(() => {
+    stayAwake.allow();
+  })
+  .catch((error) => console.error(`Error with process: ${error}`));

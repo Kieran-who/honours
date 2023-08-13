@@ -70,7 +70,7 @@ export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
     params: params,
   };
   for (let i = 0; i < arr.length; i++) {
-    obj.questions.push({ Q: arr[i].code, answers: [] });
+    obj.questions.push({ Q: arr[i].code, answers: [], errorResponses: [] });
     let errCount = 0;
     for (let c = 0; c < resCount; c++) {
       let chatResponse = await gptThreeFiveTurboCaller(
@@ -172,7 +172,7 @@ export const gptFour = async (arr, cnt, samplePerQ, params) => {
     params: params,
   };
   for (let i = 0; i < arr.length; i++) {
-    obj.questions.push({ Q: arr[i].code, answers: [] });
+    obj.questions.push({ Q: arr[i].code, answers: [], errorResponses: [] });
     let errCount = 0;
     for (let c = 0; c < resCount * 4; c++) {
       let chatResponse = await gptFourCaller(

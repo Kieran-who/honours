@@ -121,7 +121,7 @@ export const googBisonQuick = async (
   };
   // Create an array of promises for each object in the input array
   const promises = arr.map(async (item, index) => {
-    obj.questions.push({ Q: item.code, answers: [] });
+    obj.questions.push({ Q: item.code, answers: [], errorResponses: [] });
     let errCount = 0;
 
     // Create an array of promises for each iteration
@@ -249,7 +249,7 @@ export const googChatBisonQuick = async (
   };
   // Create an array of promises for each object in the input array
   const promises = arr.map(async (item, index) => {
-    obj.questions.push({ Q: item.code, answers: [] });
+    obj.questions.push({ Q: item.code, answers: [], errorResponses: [] });
     let errCount = 0;
 
     // Create an array of promises for each iteration
