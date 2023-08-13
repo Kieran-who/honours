@@ -313,74 +313,79 @@ const roundToNearestHundred = (value) => {
   }
 };
 
-// calls are groups based on where rate limiting will occur, we can run calls to Google and Openai in parallel
+const callAIModel = async (callerFunction, params, label) => {
+  try {
+    await callerFunction(...params);
+    console.log(`${label} DONE`);
+  } catch (error) {
+    console.error(`Error with ${label} process: ${error}`);
+  }
+};
+
 const openAICaller = async (cnt, sampleTotal, arr) => {
-  // Include your API calls here, I have commented the logs to indicate where you should place each API call.
-  // These logs are removed in the final version due to redundancy
-  await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-  console.log('GPT3.5-TURBO DEFAULT DONE');
-  await gptFour(arr, cnt, sampleTotal, chatGPT35DefaultParams);
-  console.log('GPT4 DEFAULT DONE');
-  await gptThreeFiveTurbo(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-  console.log('GPT3.5-TURBO ZERO DONE');
-  await gptFour(arr, cnt, sampleTotal, chatOPENAIZeroParams);
-  console.log('GPT4 ZERO DONE');
-  await gptThreeFiveTurbo(arr, cnt, sampleTotal, openAIMatchParams);
-  console.log('GPT3.5-TURBO GOOGLE MATCH DONE');
-  await gptFour(arr, cnt, sampleTotal, openAIMatchParams);
-  console.log('GPT4 GOOGLE MATCH DONE');
+  const models = [
+    [
+      gptThreeFiveTurbo,
+      [arr, cnt, sampleTotal, chatGPT35DefaultParams],
+      'GPT3.5-TURBO DEFAULT',
+    ],
+    [gptFour, [arr, cnt, sampleTotal, chatGPT35DefaultParams], 'GPT4 DEFAULT'],
+    [
+      gptThreeFiveTurbo,
+      [arr, cnt, sampleTotal, chatOPENAIZeroParams],
+      'GPT3.5-TURBO ZERO',
+    ],
+    [gptFour, [arr, cnt, sampleTotal, chatOPENAIZeroParams], 'GPT4 ZERO'],
+    [
+      gptThreeFiveTurbo,
+      [arr, cnt, sampleTotal, openAIMatchParams],
+      'GPT3.5-TURBO GOOGLE MATCH',
+    ],
+    [gptFour, [arr, cnt, sampleTotal, openAIMatchParams], 'GPT4 GOOGLE MATCH'],
+  ];
+
+  for (const [modelFunc, modelParams, label] of models) {
+    await callAIModel(modelFunc, modelParams, label);
+  }
 };
 
 const googleCaller = async (cnt, sampleTotal, arr) => {
-  // Include your API calls here
-  await googBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleDefaultParams
-  );
-  console.log('GOOGLE 1 DONE');
-  await googChatBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleDefaultParams
-  );
-  console.log('GOOGLE 2 DONE');
-  await googBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleZeroParams
-  );
-  console.log('GOOGLE 3 DONE');
-  await googChatBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleZeroParams
-  );
-  console.log('GOOGLE 4 DONE');
-  await googBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleMatchParams
-  );
-  console.log('GOOGLE 5 DONE');
-  await googChatBisonQuick(
-    arr,
-    cnt,
-    MULTIPLE_OF_100,
-    sampleTotal,
-    googleMatchParams
-  );
-  console.log('GOOGLE 6 DONE');
+  const models = [
+    [
+      googBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams],
+      'GOOGLE 1',
+    ],
+    [
+      googChatBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams],
+      'GOOGLE 2',
+    ],
+    [
+      googBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams],
+      'GOOGLE 3',
+    ],
+    [
+      googChatBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams],
+      'GOOGLE 4',
+    ],
+    [
+      googBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams],
+      'GOOGLE 5',
+    ],
+    [
+      googChatBisonQuick,
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams],
+      'GOOGLE 6',
+    ],
+  ];
+
+  for (const [modelFunc, modelParams, label] of models) {
+    await callAIModel(modelFunc, modelParams, label);
+  }
 };
 
 // SampleCount must be multiple of 100
