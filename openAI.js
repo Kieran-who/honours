@@ -7,11 +7,14 @@ import fs from 'fs';
 const openAIKey = process.env.OPEN_AI_KEY;
 const openAIURL = `https://api.openai.com/v1/chat/completions`;
 
-//equiv to google defaults
-const chatGPT35EquivParams = {
-  temperature: 0.2,
-  top_p: 0.8,
-};
+// better number parsing that handles zeros
+function parseNumber(value) {
+  const num = parseInt(value, 10);
+  if (isNaN(num)) {
+    return { number: false, result: value };
+  }
+  return { number: true, result: num };
+}
 
 //OPENAI
 //ask chatGPT endpoint specific question
@@ -82,11 +85,12 @@ export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
         obj.model = chatResponse.model;
       }
       for (let r = 0; r < chatResponse.choices.length; r++) {
-        if (!Number(chatResponse.choices[r])) {
+        let parsedObj = parseNumber(chatResponse.choices[r]);
+        if (!parsedObj.number) {
           errCount++;
           obj.questions[i].errorResponses.push(chatResponse.choices[r]);
         } else {
-          obj.questions[i].answers.push(Number(chatResponse.choices[r]));
+          obj.questions[i].answers.push(parsedObj.result);
         }
       }
       //console.log(`${i + 1}: ${c + 1}/${resCount}`);
@@ -184,11 +188,12 @@ export const gptFour = async (arr, cnt, samplePerQ, params) => {
         obj.model = chatResponse.model;
       }
       for (let r = 0; r < chatResponse.choices.length; r++) {
-        if (!Number(chatResponse.choices[r])) {
+        let parsedObj = parseNumber(chatResponse.choices[r]);
+        if (!parsedObj.number) {
           errCount++;
           obj.questions[i].errorResponses.push(chatResponse.choices[r]);
         } else {
-          obj.questions[i].answers.push(Number(chatResponse.choices[r]));
+          obj.questions[i].answers.push(parsedObj.result);
         }
       }
       //console.log(`${i + 1}: ${c + 1}/${resCount}`);

@@ -405,9 +405,7 @@ const stuffDoer = async (arr, sampleCount) => {
 };
 
 // 500 is the number of samples to generate for each question; update this value in increments of 100
-stuffDoer(rQuestions, samples)
+stuffDoer(mfqQuestions, samples)
   .then(() => stuffDoer(mfqQuestions, samples))
-  .then(() => {
-    stayAwake.allow();
-  })
+  .than(() => stayAwake.allow())
   .catch((error) => console.error(`Error with process: ${error}`));

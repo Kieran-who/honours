@@ -53,6 +53,15 @@ async function refreshToken() {
   }
 }
 
+// better number parsing that handles zeros
+function parseNumber(value) {
+  const num = parseInt(value, 10);
+  if (isNaN(num)) {
+    return { number: false, result: value };
+  }
+  return { number: true, result: num };
+}
+
 //Google text-bison@001
 const googTxtBison = async (primer, str, counter, params) => {
   let repeats = counter ? counter : 100;
@@ -141,11 +150,12 @@ export const googBisonQuick = async (
 
     for (const chatResponse of responses) {
       for (let r = 0; r < chatResponse.choices.length; r++) {
-        if (!Number(chatResponse.choices[r])) {
+        let parsedObj = parseNumber(chatResponse.choices[r]);
+        if (!parsedObj.number) {
           errCount++;
           obj.questions[index].errorResponses.push(chatResponse.choices[r]);
         } else {
-          obj.questions[index].answers.push(Number(chatResponse.choices[r]));
+          obj.questions[index].answers.push(parsedObj.result);
         }
       }
     }
@@ -269,11 +279,12 @@ export const googChatBisonQuick = async (
 
     for (const chatResponse of responses) {
       for (let r = 0; r < chatResponse.choices.length; r++) {
-        if (!Number(chatResponse.choices[r])) {
+        let parsedObj = parseNumber(chatResponse.choices[r]);
+        if (!parsedObj.number) {
           errCount++;
           obj.questions[index].errorResponses.push(chatResponse.choices[r]);
         } else {
-          obj.questions[index].answers.push(Number(chatResponse.choices[r]));
+          obj.questions[index].answers.push(parsedObj.result);
         }
       }
     }
