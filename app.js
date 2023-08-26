@@ -370,7 +370,7 @@ const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
   b1.start(arr.length * samples * models.length, 0);
   b1.update(0, { filename: `OpenAI: ${progressLabel}` });
   for (const [modelFunc, modelParams, label] of models) {
-    b1.update(null, { current: label });
+    b1.update({ current: label });
     await callAIModel(modelFunc, modelParams, label);
   }
 };
@@ -412,7 +412,7 @@ const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
   b2.start(arr.length * samples * models.length, 0);
   b2.update(0, { filename: `Google: ${progressLabel}` });
   for (const [modelFunc, modelParams, label] of models) {
-    b2.update(null, { current: label });
+    b2.update({ current: label });
     await callAIModel(modelFunc, modelParams, label);
   }
 };
