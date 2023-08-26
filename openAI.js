@@ -72,6 +72,7 @@ export const gptThreeFiveTurbo = async (
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
+    questionnaireID: arr[0].code.replace(/\d+/g, ''),
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -113,7 +114,14 @@ export const gptThreeFiveTurbo = async (
   }
   const endTime = performance.now(); // Stop measuring the time
   obj.elapsedTime = endTime - startTime;
-  const dirPath = `./data/${obj.model}`;
+  const qDir = `./data/${arr[0].code.replace(/\d+/g, '')}`;
+
+  // Create the questionnaire directory if it doesn't exist
+  if (!fs.existsSync(qDir)) {
+    fs.mkdirSync(qDir);
+  }
+
+  const dirPath = `${qDir}/${obj.model}`;
   // save file as JSON obj
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
@@ -177,6 +185,7 @@ export const gptFour = async (arr, cnt, samplePerQ, params, progressBar) => {
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
+    questionnaireID: arr[0].code.replace(/\d+/g, ''),
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -224,7 +233,14 @@ export const gptFour = async (arr, cnt, samplePerQ, params, progressBar) => {
   }
   const endTime = performance.now(); // Stop measuring the time
   obj.elapsedTime = endTime - startTime;
-  const dirPath = `./data/${obj.model}`;
+  const qDir = `./data/${arr[0].code.replace(/\d+/g, '')}`;
+
+  // Create the questionnaire directory if it doesn't exist
+  if (!fs.existsSync(qDir)) {
+    fs.mkdirSync(qDir);
+  }
+
+  const dirPath = `${qDir}/${obj.model}`;
   // Create the directory if it doesn't exist
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);

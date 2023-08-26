@@ -277,45 +277,45 @@ const mfqQuestions = [
 ];
 
 // DEFAULT MODEL PARAMETERS
-//default as shown on the vertex ai model page
+// GOOGLE -> default as shown on the vertex ai model page
 const googleDefaultParams = {
   temperature: 0.2,
-  maxOutputTokens: 2,
+  maxOutputTokens: 3,
   topP: 0.8,
   topK: 40,
 };
 
-//default as shown on the openai playground page
+// OPENAI -> default as shown on the openai playground page
 const chatGPT35DefaultParams = {
   temperature: 1,
   top_p: 1,
 };
 
 // ZERO MODEL PARAMENTERS
-//GOOGLE
+// GOOGLE ->
 const googleZeroParams = {
   temperature: 0,
   maxOutputTokens: 3,
 };
 
-//default as shown on the openai playground page
+// OPENAI -> default as shown on the openai playground page
 const chatOPENAIZeroParams = {
   temperature: 0,
   top_p: 1,
 };
 
-// MATCH GOOGLE PARAMS TO OPENAI
+// GOOGLE -> MATCH GOOGLE PARAMS TO OPENAI
 const googleMatchParams = {
   temperature: 0.8,
   topP: 1,
   maxOutputTokens: 3,
 };
 
-// MATCH OPEN PARAMS TO GOOGLE DEFAULT
+// OPENAI -> MATCH OPEN PARAMS TO GOOGLE DEFAULT
 const openAIMatchParams = {
   temperature: 0.2,
   topP: 0.8,
-  maxOutputTokens: 3,
+  maxOutputTokens: 2,
 };
 
 const MULTIPLE_OF_100 = 100;

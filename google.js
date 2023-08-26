@@ -57,7 +57,7 @@ function parseNumber(value) {
 }
 
 //Google text-bison@001
-const googTxtBison = async (primer, str, counter, params) => {
+const googTxtBison = async (primer, str, counter, params, progressBar) => {
   let repeats = counter ? counter : 100;
   const endpointURL = `https://${endAPIPoint}/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${googTxtMod}:predict`;
 
@@ -118,6 +118,7 @@ export const googBisonQuick = async (
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
+    questionnaireID: arr[0].code.replace(/\d+/g, ''),
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -172,8 +173,14 @@ export const googBisonQuick = async (
 
   const endTime = performance.now();
   obj.elapsedTime = endTime - startTime;
-  const dirPath = `./data/${obj.model}`;
+  const qDir = `./data/${arr[0].code.replace(/\d+/g, '')}`;
 
+  // Create the questionnaire directory if it doesn't exist
+  if (!fs.existsSync(qDir)) {
+    fs.mkdirSync(qDir);
+  }
+
+  const dirPath = `${qDir}/${obj.model}`;
   // Create the directory if it doesn't exist
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
@@ -250,6 +257,7 @@ export const googChatBisonQuick = async (
   const formattedDate = `D:${day}M:${month}Y:${year}`;
   const dateString = date.toISOString();
   let obj = {
+    questionnaireID: arr[0].code.replace(/\d+/g, ''),
     sampleCounts: samplePerQ,
     date: formattedDate,
     timeStamp: dateString,
@@ -308,9 +316,16 @@ export const googChatBisonQuick = async (
 
   const endTime = performance.now();
   obj.elapsedTime = endTime - startTime;
-  const dirPath = `./data/${obj.model}`;
+  const qDir = `./data/${arr[0].code.replace(/\d+/g, '')}`;
 
-  // Create the directory if it doesn't exist
+  // Create the questionnaire directory if it doesn't exist
+  if (!fs.existsSync(qDir)) {
+    fs.mkdirSync(qDir);
+  }
+
+  const dirPath = `${qDir}/${obj.model}`;
+
+  // Create the model directory if it doesn't exist
   if (!fs.existsSync(dirPath)) {
     fs.mkdirSync(dirPath);
   }
