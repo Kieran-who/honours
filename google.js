@@ -13,12 +13,7 @@ const projectId = process.env.PROJECT_ID;
 const endAPIPoint = process.env.API_ENDPOINT;
 const googTxtMod = process.env.BISON_TEXT;
 let authCode = null;
-const googAPIKey = process.env.API_KEY;
 const googChatMod = process.env.BISON_CHAT;
-
-//update google access token
-let isUpdatingToken = false;
-let isFirstCall = true;
 
 const require = createRequire(import.meta.url);
 
@@ -38,7 +33,6 @@ async function getAccessToken() {
   const token = await auth.getAccessToken();
   authCode = token;
   await delay(2000);
-  console.log(`have new token`);
   return token;
 }
 
@@ -92,12 +86,14 @@ const googTxtBison = async (primer, str, counter, params) => {
       };
       let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
       choiceCount.push(data.predictions[0].content);
+      progressBar.increment(1);
     } catch (error) {
-      console.log(`Error fetching from google: ${error}`);
+      //console.log(`Error fetching from google: ${error}`);
     }
   }
 
   let returnData = { model: `text-bison@001`, choices: choiceCount };
+
   return returnData;
 };
 
@@ -106,7 +102,8 @@ export const googBisonQuick = async (
   cnt,
   sampleCnt,
   samplePerQ,
-  params
+  params,
+  progressBar
 ) => {
   await getAccessToken();
   // Schedule token refresh at regular intervals
@@ -137,7 +134,7 @@ export const googBisonQuick = async (
     const iterationPromises = [];
     for (let c = 0; c < resCount; c++) {
       iterationPromises.push(
-        googTxtBison(item.primer, item.question, repeats, params)
+        googTxtBison(item.primer, item.question, repeats, params, progressBar)
       );
     }
 
@@ -193,7 +190,7 @@ export const googBisonQuick = async (
 };
 
 //Google chat-bison@001
-const googChatBison = async (primer, str, counter, params) => {
+const googChatBison = async (primer, str, counter, params, progressBar) => {
   let repeats = counter ? counter : 100;
   const endpointURL = `https://${endAPIPoint}/v1/projects/${projectId}/locations/us-central1/publishers/google/models/${googChatMod}:predict`;
 
@@ -223,8 +220,9 @@ const googChatBison = async (primer, str, counter, params) => {
       };
       let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
       choiceCount.push(data.predictions[0].candidates[0].content);
+      progressBar.increment(1);
     } catch (error) {
-      console.log(`Error fetching from google: ${error}`);
+      //console.log(`Error fetching from google: ${error}`);
     }
   }
   let returnData = { model: `chat-bison@001`, choices: choiceCount };
@@ -236,7 +234,8 @@ export const googChatBisonQuick = async (
   cnt,
   sampleCnt,
   samplePerQ,
-  params
+  params,
+  progressBar
 ) => {
   await getAccessToken();
   // Schedule token refresh at regular intervals
@@ -267,7 +266,7 @@ export const googChatBisonQuick = async (
     const iterationPromises = [];
     for (let c = 0; c < resCount; c++) {
       iterationPromises.push(
-        googChatBison(item.primer, item.question, repeats, params)
+        googChatBison(item.primer, item.question, repeats, params, progressBar)
       );
     }
 

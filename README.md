@@ -6,13 +6,22 @@ API endpoints.
 
 ### How this program works (briefly)
 
-The API endpoints of popular foundational generative AI models are asked a range of questions designed to measure some aspect of morality.
+The API endpoints of popular foundational generative AI models are asked a range
+of questions designed to measure some aspect of morality.
 
-The questions and format are kept as close to the original questionnaires as possible; however, some tweaking of the "primer" is done to improve the response rate - this is kept consistent across all models.
+The questions and format are kept as close to the original questionnaires as
+possible; however, some tweaking of the "primer" is done to improve the response
+rate - this is kept consistent across all models.
 
-For each model, this code generates a large sample of responses so as to calculate how consistent models are in their responses. 
+For each model, this code generates a large sample of responses so as to
+calculate how consistent models are in their responses.
 
-There are many different factors that influence the randomness of AI responses when using the API. The most obvious is the temperature parameter. Temperature is one of a few different sampling parameters which influence the randomness of generated content. To factor this in, each API endpoint is asked the same questions at different temperature levels to include a spread from 0 to 0.8 (the largest default temperature value as noted by OpenAI's documentation).
+There are many different factors that influence the randomness of AI responses
+when using the API. The most obvious is the temperature parameter. Temperature
+is one of a few different sampling parameters which influence the randomness of
+generated content. To factor this in, each API endpoint is asked the same
+questions at different temperature levels to include a spread from 0 to 0.8 (the
+largest default temperature value as noted by OpenAI's documentation).
 
 ## TO USE THIS CODE
 
@@ -59,9 +68,7 @@ Then run:
 node app.js
 ```
 
-The code is limited, with no progress bars to display progress. It will log to
-the console when each run is complete. The last console log will likely be
-'GOOGLE 6 DONE'.
+The code is limited, with simple progress bars to display progress.
 
 It takes time to run due to rate limits on the APIs.
 

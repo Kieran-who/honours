@@ -5,8 +5,21 @@ import { googBisonQuick, googChatBisonQuick } from './google.js';
 
 import * as stayAwake from 'stay-awake';
 
+// display experiement progress
+import cliProgress from 'cli-progress';
+
+// create new container
+const multibar = new cliProgress.MultiBar(
+  {
+    clearOnComplete: false,
+    hideCursor: true,
+    format: ' {bar} | {filename} | {percentage}% | Elapsed: {duration}s',
+  },
+  cliProgress.Presets.shades_grey
+);
+
 // update this based on how many responses you want to generate for each question. This must be a multiple of 100
-const samples = 500;
+const samples = process.env.SAMPLE_NUMBER ? process.env.SAMPLE_NUMBER : 500;
 
 // Ethics position questionnaire
 const fiveScale = `1 = Strongly disagree\n2 = Disagree\n3 = Neutral\n4 = Agree\n5 = Strongly Agree`;
@@ -74,7 +87,6 @@ const rQuestions = [
   },
 ];
 
-//
 // Moral Foundations Questionnaire
 // OLD -> updated to improve response rate
 //const partOneScale = `0 = not at all relevant (This consideration has nothing to do with my judgments of right and wrong)\n1 = not very relevant\n2 = slightly relevant\n3 = somewhat relevant\n4 = very relevant\n5 = extremely relevant (This is one of the most important factors when I judge right and wrong)`;
@@ -305,13 +317,9 @@ const MULTIPLE_OF_100 = 100;
 
 const roundToNearestHundred = (value) => {
   if (value % MULTIPLE_OF_100 === 0) {
-    console.log(`${value} is a multiple of 100.`);
     return value;
   } else {
     let nearestHundred = Math.round(value / MULTIPLE_OF_100) * MULTIPLE_OF_100;
-    console.log(
-      `${value} is not a multiple of 100, it is rounded to ${nearestHundred}`
-    );
     return nearestHundred;
   }
 };
@@ -319,32 +327,42 @@ const roundToNearestHundred = (value) => {
 const callAIModel = async (callerFunction, params, label) => {
   try {
     await callerFunction(...params);
-    console.log(`${label} DONE`);
   } catch (error) {
     console.error(`Error with ${label} process: ${error}`);
   }
 };
 
-const openAICaller = async (cnt, sampleTotal, arr) => {
+const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
+  // add progress bar
+  const b1 = multibar.create(arr.length * samples * 6, 0);
+  b1.update(0, { filename: `OpenAI: ${progressLabel}` });
   const models = [
     [
       gptThreeFiveTurbo,
-      [arr, cnt, sampleTotal, chatGPT35DefaultParams],
+      [arr, cnt, sampleTotal, chatGPT35DefaultParams, b1],
       'GPT3.5-TURBO DEFAULT',
     ],
-    [gptFour, [arr, cnt, sampleTotal, chatGPT35DefaultParams], 'GPT4 DEFAULT'],
+    [
+      gptFour,
+      [arr, cnt, sampleTotal, chatGPT35DefaultParams, b1],
+      'GPT4 DEFAULT',
+    ],
     [
       gptThreeFiveTurbo,
-      [arr, cnt, sampleTotal, chatOPENAIZeroParams],
+      [arr, cnt, sampleTotal, chatOPENAIZeroParams, b1],
       'GPT3.5-TURBO ZERO',
     ],
-    [gptFour, [arr, cnt, sampleTotal, chatOPENAIZeroParams], 'GPT4 ZERO'],
+    [gptFour, [arr, cnt, sampleTotal, chatOPENAIZeroParams, b1], 'GPT4 ZERO'],
     [
       gptThreeFiveTurbo,
-      [arr, cnt, sampleTotal, openAIMatchParams],
+      [arr, cnt, sampleTotal, openAIMatchParams, b1],
       'GPT3.5-TURBO GOOGLE MATCH',
     ],
-    [gptFour, [arr, cnt, sampleTotal, openAIMatchParams], 'GPT4 GOOGLE MATCH'],
+    [
+      gptFour,
+      [arr, cnt, sampleTotal, openAIMatchParams, b1],
+      'GPT4 GOOGLE MATCH',
+    ],
   ];
 
   for (const [modelFunc, modelParams, label] of models) {
@@ -352,47 +370,48 @@ const openAICaller = async (cnt, sampleTotal, arr) => {
   }
 };
 
-const googleCaller = async (cnt, sampleTotal, arr) => {
+const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
+  // progress bar
+  const b2 = multibar.create(arr.length * samples * 6, 0);
+  b2.update(0, { filename: `Google: ${progressLabel}` });
   const models = [
     [
       googBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams, b2],
       'GOOGLE 1',
     ],
     [
       googChatBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams, b2],
       'GOOGLE 2',
     ],
     [
       googBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams, b2],
       'GOOGLE 3',
     ],
     [
       googChatBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams, b2],
       'GOOGLE 4',
     ],
     [
       googBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams, b2],
       'GOOGLE 5',
     ],
     [
       googChatBisonQuick,
-      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams],
+      [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams, b2],
       'GOOGLE 6',
     ],
   ];
-
   for (const [modelFunc, modelParams, label] of models) {
     await callAIModel(modelFunc, modelParams, label);
   }
 };
 
-// SampleCount must be multiple of 100
-const stuffDoer = async (arr, sampleCount) => {
+const stuffDoer = async (arr, sampleCount, label) => {
   // Keep the system awake
   stayAwake.prevent();
 
@@ -402,13 +421,12 @@ const stuffDoer = async (arr, sampleCount) => {
 
   // Use Promise.all to execute both function concurrently, as they don't depend on each other
   await Promise.all([
-    openAICaller(cnt, sampleTotal, arr),
-    googleCaller(cnt, sampleTotal, arr),
+    openAICaller(cnt, sampleTotal, arr, label),
+    googleCaller(cnt, sampleTotal, arr, label),
   ]);
+  stayAwake.allow();
 };
 
-// 500 is the number of samples to generate for each question; update this value in increments of 100
-stuffDoer(mfqQuestions, samples)
-  .then(() => stuffDoer(mfqQuestions, samples))
-  .than(() => stayAwake.allow())
+stuffDoer(rQuestions, samples, `EPQ`)
+  .then(() => stuffDoer(mfqQuestions, samples, `MFT`))
   .catch((error) => console.error(`Error with process: ${error}`));

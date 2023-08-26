@@ -18,7 +18,7 @@ function parseNumber(value) {
 
 //OPENAI
 //ask chatGPT endpoint specific question
-const gptThreeFiveTurboCaller = async (primer, str, params) => {
+const gptThreeFiveTurboCaller = async (primer, str, params, progressBar) => {
   const headers = new Headers({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${openAIKey}`,
@@ -52,10 +52,17 @@ const gptThreeFiveTurboCaller = async (primer, str, params) => {
     choices: data.choices.map((obj) => obj.message.content),
   };
   //console.log(returnData);
+  progressBar.increment(100);
   return returnData;
 };
 
-export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
+export const gptThreeFiveTurbo = async (
+  arr,
+  cnt,
+  samplePerQ,
+  params,
+  progressBar
+) => {
   let resCount = cnt ? cnt : 100;
   const startTime = performance.now();
   const date = new Date();
@@ -79,7 +86,8 @@ export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
       let chatResponse = await gptThreeFiveTurboCaller(
         arr[i].primer,
         arr[i].question,
-        params
+        params,
+        progressBar
       );
       if (c === 0 && i === 0) {
         obj.model = chatResponse.model;
@@ -121,7 +129,7 @@ export const gptThreeFiveTurbo = async (arr, cnt, samplePerQ, params) => {
   );
 };
 
-const gptFourCaller = async (primer, str, params) => {
+const gptFourCaller = async (primer, str, params, progressBar) => {
   const headers = new Headers({
     'Content-Type': 'application/json',
     Authorization: `Bearer ${openAIKey}`,
@@ -155,6 +163,7 @@ const gptFourCaller = async (primer, str, params) => {
     choices: data.choices.map((obj) => obj.message.content),
   };
   //console.log(returnData);
+  progressBar.increment(10);
   return returnData;
 };
 
@@ -182,7 +191,8 @@ export const gptFour = async (arr, cnt, samplePerQ, params) => {
       let chatResponse = await gptFourCaller(
         arr[i].primer,
         arr[i].question,
-        params
+        params,
+        progressBar
       );
       if (c === 0 && i === 0) {
         obj.model = chatResponse.model;
