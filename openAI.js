@@ -45,7 +45,7 @@ const gptThreeFiveTurboCaller = async (primer, str, params) => {
     body: JSON.stringify(nameBody),
     headers: headers,
   };
-  let data = await fetchRetry(openAIURL, options, 10, 10000, 30000);
+  let data = await fetchRetry(openAIURL, options, 100, 500, 30000);
 
   let returnData = {
     model: data.model,
@@ -148,7 +148,7 @@ const gptFourCaller = async (primer, str, params) => {
     body: JSON.stringify(nameBody),
     headers: headers,
   };
-  let data = await fetchRetry(openAIURL, options, 20, 20000, 60000);
+  let data = await fetchRetry(openAIURL, options, 100, 500, 100000);
   //console.log(data);
   let returnData = {
     model: data.model,
