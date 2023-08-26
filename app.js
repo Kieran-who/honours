@@ -436,6 +436,7 @@ const stuffDoer = async (arr, sampleCount, label) => {
 };
 
 // Stuff doer is called for each question set; will result in new progress bars for each question set
-stuffDoer(rQuestions, samples, `EPQ`)
-  .then(() => stuffDoer(mfqQuestions, samples, `MFT`))
-  .catch((error) => console.error(`Error with process: ${error}`));
+stuffDoer(rQuestions, samples, `EPQ`).then(() => {
+  console.log(`Starting Moral Foundation Theory questions`);
+  stuffDoer(mfqQuestions, samples, `MFT`);
+});
