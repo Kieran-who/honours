@@ -38,6 +38,9 @@ You will also need to create an env file (create a file with the name .env)
 In this .env file, add the following and update with your own values:
 
 ```
+## EXPERIMENT PARAMETERS
+
+SAMPLE_NUMBER=500 ## must be multiple of 100
 
 ## OPEN AI
 
