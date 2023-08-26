@@ -2,3 +2,4 @@
 /googl-access-key.json
 node_modules
 /package-lock.json
+.ds_store

@@ -41,7 +41,7 @@ async function refreshToken() {
   try {
     const token = await getAccessToken();
     authCode = token;
-    console.log('Access token refreshed:');
+    //console.log('Access token refreshed:');
   } catch (error) {
     console.error('Error refreshing access token:', error);
   }
@@ -183,7 +183,7 @@ export const googBisonQuick = async (
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done text-bison-001 in ${obj.elapsedTime / 60000} mins`);
+      // console.log(`Done text-bison-001 in ${obj.elapsedTime / 60000} mins`);
       if (err) throw err;
     }
   );
@@ -319,7 +319,7 @@ export const googChatBisonQuick = async (
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done chat-bison-001 in ${obj.elapsedTime / 60000} mins`);
+      // console.log(`Done chat-bison-001 in ${obj.elapsedTime / 60000} mins`);
       if (err) throw err;
     }
   );

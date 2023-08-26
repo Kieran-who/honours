@@ -123,7 +123,7 @@ export const gptThreeFiveTurbo = async (
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done chatGPT in ${obj.elapsedTime / 60000} mins`);
+      // console.log(`Done chatGPT in ${obj.elapsedTime / 60000} mins`);
       if (err) throw err;
     }
   );
@@ -234,7 +234,7 @@ export const gptFour = async (arr, cnt, samplePerQ, params, progressBar) => {
     `${dirPath}/${obj.model}_${fileData}.json`,
     JSON.stringify(obj),
     (err) => {
-      console.log(`Done GPT4 in ${obj.elapsedTime / 60000} mins.`);
+      // console.log(`Done GPT4 in ${obj.elapsedTime / 60000} mins.`);
       if (err) throw err;
     }
   );

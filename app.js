@@ -13,10 +13,15 @@ const multibar = new cliProgress.MultiBar(
   {
     clearOnComplete: false,
     hideCursor: true,
-    format: ' {bar} | {filename} | {percentage}% | Elapsed: {duration}s',
+    format:
+      ' {bar} | {filename} | Currently processing: {current} | {percentage}% | Elapsed: {duration}s',
   },
   cliProgress.Presets.shades_grey
 );
+
+// progress bar -> one for each google and openai
+const b1 = multibar.create();
+const b2 = multibar.create();
 
 // update this based on how many responses you want to generate for each question. This must be a multiple of 100
 const samples = process.env.SAMPLE_NUMBER ? process.env.SAMPLE_NUMBER : 500;
@@ -333,9 +338,6 @@ const callAIModel = async (callerFunction, params, label) => {
 };
 
 const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
-  // add progress bar
-  const b1 = multibar.create(arr.length * samples * 6, 0);
-  b1.update(0, { filename: `OpenAI: ${progressLabel}` });
   const models = [
     [
       gptThreeFiveTurbo,
@@ -364,16 +366,16 @@ const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
       'GPT4 GOOGLE MATCH',
     ],
   ];
-
+  // update progress bar
+  b1.start(arr.length * samples * models.length, 0);
+  b1.update(0, { filename: `OpenAI: ${progressLabel}` });
   for (const [modelFunc, modelParams, label] of models) {
     await callAIModel(modelFunc, modelParams, label);
+    b1.update({ current: label });
   }
 };
 
 const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
-  // progress bar
-  const b2 = multibar.create(arr.length * samples * 6, 0);
-  b2.update(0, { filename: `Google: ${progressLabel}` });
   const models = [
     [
       googBisonQuick,
@@ -406,8 +408,12 @@ const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
       'GOOGLE 6',
     ],
   ];
+  // update progress bar
+  b2.start(arr.length * samples * models.length, 0);
+  b2.update(0, { filename: `Google: ${progressLabel}` });
   for (const [modelFunc, modelParams, label] of models) {
     await callAIModel(modelFunc, modelParams, label);
+    b2.update({ current: label });
   }
 };
 
@@ -427,6 +433,7 @@ const stuffDoer = async (arr, sampleCount, label) => {
   stayAwake.allow();
 };
 
+// Stuff doer is called for each question set; will result in new progress bars for each question set
 stuffDoer(rQuestions, samples, `EPQ`)
   .then(() => stuffDoer(mfqQuestions, samples, `MFT`))
   .catch((error) => console.error(`Error with process: ${error}`));
