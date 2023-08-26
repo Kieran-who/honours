@@ -208,9 +208,10 @@ const googChatBison = async (primer, str, counter, params) => {
       const nameBody = {
         instances: [
           {
-            context: primer,
             examples: [],
-            messages: [{ author: `user`, content: str }],
+            messages: [
+              { author: `user`, content: `${primer}\n\nSTATEMENT: ${str}` },
+            ],
           },
         ],
         parameters: params,

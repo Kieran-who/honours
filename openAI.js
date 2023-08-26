@@ -31,11 +31,11 @@ const gptThreeFiveTurboCaller = async (primer, str, params) => {
     max_tokens: 1,
     messages: [
       {
-        role: 'system',
+        role: 'user',
         content: primer,
       },
       {
-        role: 'system',
+        role: 'user',
         content: str,
       },
     ],
@@ -134,11 +134,11 @@ const gptFourCaller = async (primer, str, params) => {
     max_tokens: 1,
     messages: [
       {
-        role: 'system',
+        role: 'user',
         content: primer,
       },
       {
-        role: 'system',
+        role: 'user',
         content: str,
       },
     ],
