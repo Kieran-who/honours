@@ -85,7 +85,7 @@ const googTxtBison = async (primer, str, counter, params) => {
         headers: headers,
       };
       let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
-      choiceCount.push(data.predictions[0].content);
+      choiceCount.push(data.predictions[0].content.trim());
       progressBar.increment(1);
     } catch (error) {
       //console.log(`Error fetching from google: ${error}`);
@@ -219,7 +219,7 @@ const googChatBison = async (primer, str, counter, params, progressBar) => {
         headers: headers,
       };
       let data = await fetchRetry(endpointURL, options, 10, 100, 100000);
-      choiceCount.push(data.predictions[0].candidates[0].content);
+      choiceCount.push(data.predictions[0].candidates[0].content.trim());
       progressBar.increment(1);
     } catch (error) {
       //console.log(`Error fetching from google: ${error}`);

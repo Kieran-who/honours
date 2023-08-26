@@ -295,7 +295,7 @@ const chatGPT35DefaultParams = {
 //GOOGLE
 const googleZeroParams = {
   temperature: 0,
-  maxOutputTokens: 2,
+  maxOutputTokens: 3,
 };
 
 //default as shown on the openai playground page
@@ -308,14 +308,14 @@ const chatOPENAIZeroParams = {
 const googleMatchParams = {
   temperature: 0.8,
   topP: 1,
-  maxOutputTokens: 2,
+  maxOutputTokens: 3,
 };
 
 // MATCH OPEN PARAMS TO GOOGLE DEFAULT
 const openAIMatchParams = {
   temperature: 0.2,
   topP: 0.8,
-  maxOutputTokens: 2,
+  maxOutputTokens: 3,
 };
 
 const MULTIPLE_OF_100 = 100;
@@ -373,6 +373,7 @@ const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
     b1.update({ current: label });
     await callAIModel(modelFunc, modelParams, label);
   }
+  b1.stop();
 };
 
 const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
@@ -415,6 +416,7 @@ const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
     b2.update({ current: label });
     await callAIModel(modelFunc, modelParams, label);
   }
+  b2.stop();
 };
 
 const stuffDoer = async (arr, sampleCount, label) => {
