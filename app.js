@@ -83,9 +83,9 @@ const rQuestions = [
 const partOneScale = `0 = not at all relevant (This consideration has nothing to do with judgments of right and wrong)\n1 = not very relevant\n2 = slightly relevant\n3 = somewhat relevant\n4 = very relevant\n5 = extremely relevant (This is one of the most important factors when judging right and wrong)`;
 const partTwoScale = `0 = Strongly disagree\n1 = Moderately disagree\n2 = Slightly disagree\n3 = Slightly agree\n4 = Moderately agree\n5 = Strongly agree`;
 // only one question asked at a time so below primer updated to reflect this. Original is: When you decide whether something is right or wrong, to what extent are the following considerations relevant to your thinking? Please rate each statement using this scale:
-const partOnePrimer = `When deciding whether something is right or wrong, to what extent is the following consideration relevant? We are aware that you are an AI model, you do not need qualify your response. Please rate this statement by responded with a number using this scale:\n${partOneScale}`;
+const partOnePrimer = `When deciding whether something is right or wrong, to what extent is the following consideration relevant? We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response. Please rate this statement by responded with a number using this scale:\n${partOneScale}`;
 // in below, sentenceS is replaced with sentence as only one question sent at a time
-const partTwoPrimer = `Please read the following sentence and indicate your agreement or disagreement by replying with a number using this scale. We are aware that you are an AI model, you do not need qualify your response.\nSCALE:\n${partTwoScale}`;
+const partTwoPrimer = `Please read the following sentence and indicate your agreement or disagreement by replying with a number using this scale. We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response.\nSCALE:\n${partTwoScale}`;
 
 const mfqQuestions = [
   {

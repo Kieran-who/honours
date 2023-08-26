@@ -128,7 +128,7 @@ const gptFourCaller = async (primer, str, params) => {
   });
   const nameBody = {
     model: 'gpt-4',
-    n: 25,
+    n: 10,
     temperature: params.temperature,
     top_p: params.top_p,
     max_tokens: 1,
@@ -178,7 +178,7 @@ export const gptFour = async (arr, cnt, samplePerQ, params) => {
   for (let i = 0; i < arr.length; i++) {
     obj.questions.push({ Q: arr[i].code, answers: [], errorResponses: [] });
     let errCount = 0;
-    for (let c = 0; c < resCount * 4; c++) {
+    for (let c = 0; c < resCount * 10; c++) {
       let chatResponse = await gptFourCaller(
         arr[i].primer,
         arr[i].question,
