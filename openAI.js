@@ -167,7 +167,7 @@ const gptFourCaller = async (primer, str, params, progressBar) => {
   return returnData;
 };
 
-export const gptFour = async (arr, cnt, samplePerQ, params) => {
+export const gptFour = async (arr, cnt, samplePerQ, params, progressBar) => {
   let resCount = cnt ? cnt : 100;
   const startTime = performance.now();
   const date = new Date();
