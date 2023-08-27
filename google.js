@@ -3,7 +3,10 @@ import { GoogleAuth } from 'google-auth-library';
 import { createRequire } from 'module';
 
 import { fetchRetry } from './fetchRetry.js';
+
 import fs from 'fs';
+
+import { errorLogger } from './errorLogger.js';
 
 // DELAY FN
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -43,7 +46,7 @@ async function refreshToken() {
     authCode = token;
     //console.log('Access token refreshed:');
   } catch (error) {
-    console.error('Error refreshing access token:', error);
+    errorLogger(`Error refreshing access token.`, error);
   }
 }
 

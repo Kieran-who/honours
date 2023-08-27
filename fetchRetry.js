@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { errorLogger } from './errorLogger.js';
 //retry API function
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -42,10 +43,7 @@ export const fetchRetry = async (
       const errorMessage = error.message;
       // 429 will be returned frequently as rate limits hit, no need to console log
       if (errorMessage !== `429`) {
-        console.log(
-          `${errorMessage}, retrying ${url}, attempt number: ${attempt}`
-        );
-        console.error('Error:', error);
+        errorLogger(`fetchRetry error: ${errorMessage}`, error);
       }
       await delay(retryDelay * attempt);
     }
