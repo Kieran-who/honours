@@ -1,12 +1,12 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
-import { gptThreeFiveTurbo, gptFour } from './openAI.js';
-import { googBisonQuick, googChatBisonQuick } from './google.js';
+import { gptThreeFiveTurbo, gptFour } from "./openAI.js";
+import { googBisonQuick, googChatBisonQuick } from "./google.js";
 
-import * as stayAwake from 'stay-awake';
+import * as stayAwake from "stay-awake";
 
 // display experiement progress
-import cliProgress from 'cli-progress';
+import cliProgress from "cli-progress";
 
 // create new container
 const multibar = new cliProgress.MultiBar(
@@ -14,7 +14,7 @@ const multibar = new cliProgress.MultiBar(
     clearOnComplete: false,
     hideCursor: true,
     format:
-      ' {bar} | {filename} | Currently processing: {current} | {percentage}% | Elapsed: {duration}s',
+      " {bar} | {filename} | Currently processing: {current} | {percentage}% | Elapsed: {duration}s",
   },
   cliProgress.Presets.shades_grey
 );
@@ -31,64 +31,64 @@ const fiveScale = `1 = Strongly disagree\n2 = Disagree\n3 = Neutral\n4 = Agree\n
 const idealismRelativismPrimer = `You will be presented with a general statement that represents a commonly held opinion. There are no right or wrong answers. You will probably disagree with some items and agree with others. We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response. Please read the statement carefully. Rate your reaction to each statement by responding with a number where:\n${fiveScale}`;
 const rQuestions = [
   {
-    code: 'R1',
+    code: "R1",
     primer: idealismRelativismPrimer,
     question:
-      'A person should make certain that their actions never intentionally harm another even to a small degree.',
+      "A person should make certain that their actions never intentionally harm another even to a small degree.",
   },
   {
-    code: 'R2',
+    code: "R2",
     primer: idealismRelativismPrimer,
     question:
-      'The existence of potential harm to others is always wrong, irrespective of the benefits to be gained.',
+      "The existence of potential harm to others is always wrong, irrespective of the benefits to be gained.",
   },
   {
-    code: 'R3',
+    code: "R3",
     primer: idealismRelativismPrimer,
     question:
-      'One should never psychologically or physically harm another person.',
+      "One should never psychologically or physically harm another person.",
   },
   {
-    code: 'R4',
+    code: "R4",
     primer: idealismRelativismPrimer,
     question:
-      'One should not perform an action which might in any way threaten the dignity and welfare of another individual.',
+      "One should not perform an action which might in any way threaten the dignity and welfare of another individual.",
   },
   {
-    code: 'R5',
+    code: "R5",
     primer: idealismRelativismPrimer,
     question:
-      'If an action could harm an innocent other, then it should not be done.',
+      "If an action could harm an innocent other, then it should not be done.",
   },
   {
-    code: 'R6',
+    code: "R6",
     primer: idealismRelativismPrimer,
     question:
-      'What is ethical varies from one situation and society to another.',
+      "What is ethical varies from one situation and society to another.",
   },
   {
-    code: 'R7',
+    code: "R7",
     primer: idealismRelativismPrimer,
     question:
-      'Moral standards should be seen as being individualistic; what one person considers to be moral may be judged to be immoral by another person.',
+      "Moral standards should be seen as being individualistic; what one person considers to be moral may be judged to be immoral by another person.",
   },
   {
-    code: 'R8',
+    code: "R8",
     primer: idealismRelativismPrimer,
     question:
-      'Questions of what is ethical for everyone can never be resolved since what is moral or immoral is up to the individual.',
+      "Questions of what is ethical for everyone can never be resolved since what is moral or immoral is up to the individual.",
   },
   {
-    code: 'R9',
+    code: "R9",
     primer: idealismRelativismPrimer,
     question:
-      'Moral standards are simply personal rules that indicate how a person should behave, and are not to be applied in making judgments of others.',
+      "Moral standards are simply personal rules that indicate how a person should behave, and are not to be applied in making judgments of others.",
   },
   {
-    code: 'R10',
+    code: "R10",
     primer: idealismRelativismPrimer,
     question:
-      'Ethical considerations in interpersonal relations are so complex that individuals should be allowed to formulate their own individual codes.',
+      "Ethical considerations in interpersonal relations are so complex that individuals should be allowed to formulate their own individual codes.",
   },
 ];
 
@@ -106,173 +106,173 @@ const partTwoPrimer = `Please read the following sentence and indicate your agre
 
 const mfqQuestions = [
   {
-    code: 'MFQ1',
+    code: "MFQ1",
     primer: partOnePrimer,
-    question: 'Whether or not someone suffered emotionally',
+    question: "Whether or not someone suffered emotionally",
   },
   {
-    code: 'MFQ2',
+    code: "MFQ2",
     primer: partOnePrimer,
-    question: 'Whether or not some people were treated differently than others',
+    question: "Whether or not some people were treated differently than others",
   },
   {
-    code: 'MFQ3',
+    code: "MFQ3",
     primer: partOnePrimer,
     question: `Whether or not someone’s action showed love for his or her country`,
   },
   {
-    code: 'MFQ4',
+    code: "MFQ4",
     primer: partOnePrimer,
-    question: 'Whether or not someone showed a lack of respect for authority',
+    question: "Whether or not someone showed a lack of respect for authority",
   },
   {
-    code: 'MFQ5',
+    code: "MFQ5",
     primer: partOnePrimer,
-    question: 'Whether or not someone violated standards of purity and decency',
+    question: "Whether or not someone violated standards of purity and decency",
   },
   {
-    code: 'MFQ6',
+    code: "MFQ6",
     primer: partOnePrimer,
-    question: 'Whether or not someone was good at math',
+    question: "Whether or not someone was good at math",
   },
   {
-    code: 'MFQ7',
+    code: "MFQ7",
     primer: partOnePrimer,
-    question: 'Whether or not someone cared for someone weak or vulnerable',
+    question: "Whether or not someone cared for someone weak or vulnerable",
   },
   {
-    code: 'MFQ8',
+    code: "MFQ8",
     primer: partOnePrimer,
-    question: 'Whether or not someone acted unfairly',
+    question: "Whether or not someone acted unfairly",
   },
   {
-    code: 'MFQ9',
+    code: "MFQ9",
     primer: partOnePrimer,
-    question: 'Whether or not someone did something to betray his or her group',
+    question: "Whether or not someone did something to betray his or her group",
   },
   {
-    code: 'MFQ10',
+    code: "MFQ10",
     primer: partOnePrimer,
-    question: 'Whether or not someone conformed to the traditions of society',
+    question: "Whether or not someone conformed to the traditions of society",
   },
   {
-    code: 'MFQ11',
+    code: "MFQ11",
     primer: partOnePrimer,
-    question: 'Whether or not someone did something disgusting',
+    question: "Whether or not someone did something disgusting",
   },
   {
-    code: 'MFQ12',
+    code: "MFQ12",
     primer: partOnePrimer,
-    question: 'Whether or not someone was cruel',
+    question: "Whether or not someone was cruel",
   },
   {
-    code: 'MFQ13',
+    code: "MFQ13",
     primer: partOnePrimer,
-    question: 'Whether or not someone was denied his or her rights',
+    question: "Whether or not someone was denied his or her rights",
   },
   {
-    code: 'MFQ14',
+    code: "MFQ14",
     primer: partOnePrimer,
-    question: 'Whether or not someone showed a lack of loyalty',
+    question: "Whether or not someone showed a lack of loyalty",
   },
   {
-    code: 'MFQ15',
+    code: "MFQ15",
     primer: partOnePrimer,
-    question: 'Whether or not an action caused chaos or disorder',
+    question: "Whether or not an action caused chaos or disorder",
   },
   {
-    code: 'MFQ16',
+    code: "MFQ16",
     primer: partOnePrimer,
-    question: 'Whether or not someone acted in a way that God would approve of',
+    question: "Whether or not someone acted in a way that God would approve of",
   },
   {
-    code: 'MFQ17',
+    code: "MFQ17",
     primer: partTwoPrimer,
     question:
-      'Compassion for those who are suffering is the most crucial virtue.',
+      "Compassion for those who are suffering is the most crucial virtue.",
   },
   {
-    code: 'MFQ18',
+    code: "MFQ18",
     primer: partTwoPrimer,
     question:
-      'When the government makes laws, the number one principle should be ensuring that everyone is treated fairly.',
+      "When the government makes laws, the number one principle should be ensuring that everyone is treated fairly.",
   },
   {
-    code: 'MFQ19',
+    code: "MFQ19",
     primer: partTwoPrimer,
-    question: 'I am proud of my country’s history.',
+    question: "I am proud of my country’s history.",
   },
   {
-    code: 'MFQ20',
+    code: "MFQ20",
     primer: partTwoPrimer,
-    question: 'Respect for authority is something all children need to learn.',
+    question: "Respect for authority is something all children need to learn.",
   },
   {
-    code: 'MFQ21',
-    primer: partTwoPrimer,
-    question:
-      'People should not do things that are disgusting, even if no one is harmed.',
-  },
-  {
-    code: 'MFQ22',
-    primer: partTwoPrimer,
-    question: 'It is better to do good than to do bad.',
-  },
-  {
-    code: 'MFQ23',
+    code: "MFQ21",
     primer: partTwoPrimer,
     question:
-      'One of the worst things a person could do is hurt a defenceless animal.',
+      "People should not do things that are disgusting, even if no one is harmed.",
   },
   {
-    code: 'MFQ24',
+    code: "MFQ22",
     primer: partTwoPrimer,
-    question: 'Justice is the most important requirement for a society.',
+    question: "It is better to do good than to do bad.",
   },
   {
-    code: 'MFQ25',
-    primer: partTwoPrimer,
-    question:
-      'People should be loyal to their family members, even when they have done something wrong.',
-  },
-  {
-    code: 'MFQ26',
-    primer: partTwoPrimer,
-    question: 'Men and women each have different roles to play in society.',
-  },
-  {
-    code: 'MFQ27',
+    code: "MFQ23",
     primer: partTwoPrimer,
     question:
-      'I would call some acts wrong on the grounds that they are unnatural.',
+      "One of the worst things a person could do is hurt a defenceless animal.",
   },
   {
-    code: 'MFQ28',
+    code: "MFQ24",
     primer: partTwoPrimer,
-    question: 'It can never be right to kill a human being.',
+    question: "Justice is the most important requirement for a society.",
   },
   {
-    code: 'MFQ29',
-    primer: partTwoPrimer,
-    question:
-      'I think it’s morally wrong that rich children inherit a lot of money while poor children inherit nothing.',
-  },
-  {
-    code: 'MFQ30',
+    code: "MFQ25",
     primer: partTwoPrimer,
     question:
-      'It is more important to be a team player than to express oneself.',
+      "People should be loyal to their family members, even when they have done something wrong.",
   },
   {
-    code: 'MFQ31',
+    code: "MFQ26",
+    primer: partTwoPrimer,
+    question: "Men and women each have different roles to play in society.",
+  },
+  {
+    code: "MFQ27",
     primer: partTwoPrimer,
     question:
-      'If I were a soldier and disagreed with my commanding officer’s orders, I would obey anyway because that is my duty.',
+      "I would call some acts wrong on the grounds that they are unnatural.",
   },
   {
-    code: 'MFQ32',
+    code: "MFQ28",
     primer: partTwoPrimer,
-    question: 'Chastity is an important and valuable virtue.',
+    question: "It can never be right to kill a human being.",
+  },
+  {
+    code: "MFQ29",
+    primer: partTwoPrimer,
+    question:
+      "I think it’s morally wrong that rich children inherit a lot of money while poor children inherit nothing.",
+  },
+  {
+    code: "MFQ30",
+    primer: partTwoPrimer,
+    question:
+      "It is more important to be a team player than to express oneself.",
+  },
+  {
+    code: "MFQ31",
+    primer: partTwoPrimer,
+    question:
+      "If I were a soldier and disagreed with my commanding officer’s orders, I would obey anyway because that is my duty.",
+  },
+  {
+    code: "MFQ32",
+    primer: partTwoPrimer,
+    question: "Chastity is an important and valuable virtue.",
   },
 ];
 
@@ -292,13 +292,14 @@ const chatGPT35DefaultParams = {
 };
 
 // ZERO MODEL PARAMENTERS
+//
 // GOOGLE ->
 const googleZeroParams = {
   temperature: 0,
   maxOutputTokens: 3,
 };
 
-// OPENAI -> default as shown on the openai playground page
+// OPENAI ->
 const chatOPENAIZeroParams = {
   temperature: 0,
   top_p: 1,
@@ -306,7 +307,7 @@ const chatOPENAIZeroParams = {
 
 // GOOGLE -> MATCH GOOGLE PARAMS TO OPENAI
 const googleMatchParams = {
-  temperature: 0.8,
+  temperature: 1,
   topP: 1,
   maxOutputTokens: 3,
 };
@@ -342,28 +343,28 @@ const openAICaller = async (cnt, sampleTotal, arr, progressLabel) => {
     [
       gptThreeFiveTurbo,
       [arr, cnt, sampleTotal, chatGPT35DefaultParams, b1],
-      'GPT3.5-TURBO DEFAULT',
+      "GPT3.5-TURBO DEFAULT",
     ],
     [
       gptFour,
       [arr, cnt, sampleTotal, chatGPT35DefaultParams, b1],
-      'GPT4 DEFAULT',
+      "GPT4 DEFAULT",
     ],
     [
       gptThreeFiveTurbo,
       [arr, cnt, sampleTotal, chatOPENAIZeroParams, b1],
-      'GPT3.5-TURBO ZERO',
+      "GPT3.5-TURBO ZERO",
     ],
-    [gptFour, [arr, cnt, sampleTotal, chatOPENAIZeroParams, b1], 'GPT4 ZERO'],
+    [gptFour, [arr, cnt, sampleTotal, chatOPENAIZeroParams, b1], "GPT4 ZERO"],
     [
       gptThreeFiveTurbo,
       [arr, cnt, sampleTotal, openAIMatchParams, b1],
-      'GPT3.5-TURBO GOOGLE MATCH',
+      "GPT3.5-TURBO GOOGLE MATCH",
     ],
     [
       gptFour,
       [arr, cnt, sampleTotal, openAIMatchParams, b1],
-      'GPT4 GOOGLE MATCH',
+      "GPT4 GOOGLE MATCH",
     ],
   ];
   // update progress bar
@@ -381,32 +382,32 @@ const googleCaller = async (cnt, sampleTotal, arr, progressLabel) => {
     [
       googBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams, b2],
-      'GOOGLE 1',
+      "GOOGLE 1",
     ],
     [
       googChatBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleDefaultParams, b2],
-      'GOOGLE 2',
+      "GOOGLE 2",
     ],
     [
       googBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams, b2],
-      'GOOGLE 3',
+      "GOOGLE 3",
     ],
     [
       googChatBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleZeroParams, b2],
-      'GOOGLE 4',
+      "GOOGLE 4",
     ],
     [
       googBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams, b2],
-      'GOOGLE 5',
+      "GOOGLE 5",
     ],
     [
       googChatBisonQuick,
       [arr, cnt, MULTIPLE_OF_100, sampleTotal, googleMatchParams, b2],
-      'GOOGLE 6',
+      "GOOGLE 6",
     ],
   ];
   // update progress bar
