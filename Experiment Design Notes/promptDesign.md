@@ -30,5 +30,6 @@ being considered in the design of the API call prompt structure, with the prompt
 finishing with ‘ANSWER: ’ (including the trailing whitespace) to promote the
 completion to just include the number.[^1]
 
-[^1]‘Design Text Prompts | Vertex AI’, Google Cloud
-<https://cloud.google.com/vertex-ai/docs/generative-ai/text/text-prompts>.
+[^1]:
+    ‘Design Text Prompts | Vertex AI’, Google Cloud
+    <https://cloud.google.com/vertex-ai/docs/generative-ai/text/text-prompts>.
