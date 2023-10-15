@@ -1,4 +1,4 @@
-# This file details some of the approaches taken to prompt design
+# Prompt Design and Token Counts
 
 ## Primer design
 
