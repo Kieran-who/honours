@@ -21,16 +21,16 @@ system felt compelled to make the asker aware of this fact.
 ## Token Window
 
 To reduce verbosity in responses a very small token window for responses was
-set. This can be set as a parameter when calling the API. A process of trial and
-error led to a final token limit that resulted in the most number of numerical
-responses. For Google’s models, this was a max token count of 3; for OpenAI,
-this was 1. Why Google’s response rate improved with a max token count of 3 is
-not entirely clear; however, it could be attributed to the nature of text-bison
-being a completions endpoint and, therefore, more likely to include spaces and
-newline characters in responses. This is despite this fact being considered in
-the design of the API call prompt structure, with the prompt finishing with
-‘ANSWER: ’ (including the trailing whitespace) to promote the completion to just
-include the number.[^1]
+set. Token count can be set as a parameter when calling the API. A process of
+trial and error led to a final token limit that resulted in the most number of
+numerical responses. For Google’s models, this was a max token count of 3; for
+OpenAI, this was 1. Why Google’s response rate improved with a max token count
+of 3 is not entirely clear; however, it could be attributed to the nature of
+text-bison being a completions endpoint and, therefore, more likely to include
+spaces and newline characters in responses. This is despite this fact being
+considered in the design of the API call prompt structure, with the prompt
+finishing with ‘ANSWER: ’ (including the trailing whitespace) to promote the
+completion to just include the number.[^1]
 
 [^1]:
     ‘Design Text Prompts | Vertex AI’, Google Cloud
