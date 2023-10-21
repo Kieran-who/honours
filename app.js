@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { gptThreeFiveTurbo, gptFour } from './openAI.js';
 import { googBisonQuick, googChatBisonQuick } from './google.js';
+import jsonToCSV from './JSON2CSV.js';
 
 import * as stayAwake from 'stay-awake';
 
@@ -31,55 +32,55 @@ const fiveScale = `1 = Strongly disagree\n2 = Disagree\n3 = Neutral\n4 = Agree\n
 const idealismRelativismPrimer = `You will be presented with a general statement that represents a commonly held opinion. There are no right or wrong answers. You will probably disagree with some items and agree with others. We are interested in the extent to which you agree or disagree with such matters of opinion. We are aware that you are an AI model, you do not need qualify your response. Please read the statement carefully. Rate your reaction to each statement by responding with a number where:\n${fiveScale}`;
 const rQuestions = [
   {
-    code: 'R1',
+    code: 'R01',
     primer: idealismRelativismPrimer,
     question:
       'A person should make certain that their actions never intentionally harm another even to a small degree.',
   },
   {
-    code: 'R2',
+    code: 'R02',
     primer: idealismRelativismPrimer,
     question:
       'The existence of potential harm to others is always wrong, irrespective of the benefits to be gained.',
   },
   {
-    code: 'R3',
+    code: 'R03',
     primer: idealismRelativismPrimer,
     question:
       'One should never psychologically or physically harm another person.',
   },
   {
-    code: 'R4',
+    code: 'R04',
     primer: idealismRelativismPrimer,
     question:
       'One should not perform an action which might in any way threaten the dignity and welfare of another individual.',
   },
   {
-    code: 'R5',
+    code: 'R05',
     primer: idealismRelativismPrimer,
     question:
       'If an action could harm an innocent other, then it should not be done.',
   },
   {
-    code: 'R6',
+    code: 'R06',
     primer: idealismRelativismPrimer,
     question:
       'What is ethical varies from one situation and society to another.',
   },
   {
-    code: 'R7',
+    code: 'R07',
     primer: idealismRelativismPrimer,
     question:
       'Moral standards should be seen as being individualistic; what one person considers to be moral may be judged to be immoral by another person.',
   },
   {
-    code: 'R8',
+    code: 'R08',
     primer: idealismRelativismPrimer,
     question:
       'Questions of what is ethical for everyone can never be resolved since what is moral or immoral is up to the individual.',
   },
   {
-    code: 'R9',
+    code: 'R09',
     primer: idealismRelativismPrimer,
     question:
       'Moral standards are simply personal rules that indicate how a person should behave, and are not to be applied in making judgments of others.',
@@ -106,47 +107,47 @@ const partTwoPrimer = `Please read the following sentence and indicate your agre
 
 const mfqQuestions = [
   {
-    code: 'MFQ1',
+    code: 'MFQ01',
     primer: partOnePrimer,
     question: 'Whether or not someone suffered emotionally',
   },
   {
-    code: 'MFQ2',
+    code: 'MFQ02',
     primer: partOnePrimer,
     question: 'Whether or not some people were treated differently than others',
   },
   {
-    code: 'MFQ3',
+    code: 'MFQ03',
     primer: partOnePrimer,
     question: `Whether or not someone’s action showed love for his or her country`,
   },
   {
-    code: 'MFQ4',
+    code: 'MFQ04',
     primer: partOnePrimer,
     question: 'Whether or not someone showed a lack of respect for authority',
   },
   {
-    code: 'MFQ5',
+    code: 'MFQ05',
     primer: partOnePrimer,
     question: 'Whether or not someone violated standards of purity and decency',
   },
   {
-    code: 'MFQ6',
+    code: 'MFQ06',
     primer: partOnePrimer,
     question: 'Whether or not someone was good at math',
   },
   {
-    code: 'MFQ7',
+    code: 'MFQ07',
     primer: partOnePrimer,
     question: 'Whether or not someone cared for someone weak or vulnerable',
   },
   {
-    code: 'MFQ8',
+    code: 'MFQ08',
     primer: partOnePrimer,
     question: 'Whether or not someone acted unfairly',
   },
   {
-    code: 'MFQ9',
+    code: 'MFQ09',
     primer: partOnePrimer,
     question: 'Whether or not someone did something to betray his or her group',
   },
@@ -433,11 +434,13 @@ const stuffDoer = async (arr, sampleCount, label) => {
     openAICaller(cnt, sampleTotal, arr, label),
     googleCaller(cnt, sampleTotal, arr, label),
   ]);
+  await jsonToCSV('data/');
+  console.log(`Finished, all data has been saved in the data folder`);
   stayAwake.allow();
 };
 
 // Stuff doer is called for each question set; will result in new progress bars for each question set
 stuffDoer(rQuestions, samples, `EPQ`).then(() => {
-  console.log(`Starting Moral Foundation Theory questions`);
+  console.log(`Starting`);
   stuffDoer(mfqQuestions, samples, `MFT`);
 });

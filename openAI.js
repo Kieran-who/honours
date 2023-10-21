@@ -102,7 +102,6 @@ export const gptThreeFiveTurbo = async (
           obj.questions[i].answers.push(parsedObj.result);
         }
       }
-      //console.log(`${i + 1}: ${c + 1}/${resCount}`);
     }
     obj.questions[i].nonValid = errCount;
     const sum = obj.questions[i].answers.reduce((accumulator, currentValue) => {

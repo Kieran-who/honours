@@ -75,6 +75,9 @@ The code is limited, with simple progress bars to display progress.
 
 It takes time to run due to rate limits on the APIs.
 
-Files are saved in JSON format. If needed, these files can be converted to csv
-(and opened and then saved in Excel) using a site such as this:
-https://www.convertcsv.com/json-to-csv.htm
+## Updates
+
+1. Data from the paper has been saved in the Experiment Design Notes and Paper
+   Data folder
+2. Function to automatically convert the JSON data to CSV files which can be
+   opened in and processed by Excel
