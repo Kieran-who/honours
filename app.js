@@ -434,13 +434,13 @@ const stuffDoer = async (arr, sampleCount, label) => {
     openAICaller(cnt, sampleTotal, arr, label),
     googleCaller(cnt, sampleTotal, arr, label),
   ]);
-  await jsonToCSV('data/');
-  console.log(`Finished, all data has been saved in the data folder`);
   stayAwake.allow();
 };
 
 // Stuff doer is called for each question set; will result in new progress bars for each question set
-stuffDoer(rQuestions, samples, `EPQ`).then(() => {
+stuffDoer(rQuestions, samples, `EPQ`).then(async () => {
   console.log(`Starting`);
-  stuffDoer(mfqQuestions, samples, `MFT`);
+  await stuffDoer(mfqQuestions, samples, `MFT`);
+  await jsonToCSV('data/');
+  console.log(`Finished, all data has been saved in the data folder`);
 });
